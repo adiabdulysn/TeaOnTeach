@@ -1,21 +1,27 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Checkbox, Form, Input, Typography, App } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { login } from '@/app/actions/auth';
+import { useTheme } from 'next-themes';
 
 const { Title, Text } = Typography;
 
 export default function LoginPage() {
   const { message } = App.useApp();
+  const { resolvedTheme } = useTheme();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   const appName = "Tea on Tech";
-  const appTitle = "The Fix is Brewing";
+  const appSubtitle = "The Fix is Brewing";
   const appCopyright = "IT - Harbarindo Baharitama";
 
   const onFinish = async (values: any) => {
@@ -36,37 +42,38 @@ export default function LoginPage() {
     }
   };
 
+  const isDark = mounted && resolvedTheme === 'dark';
+
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#020617] relative overflow-hidden font-sans p-6">
-      {/* Space & Animated Grid */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-grid-white bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black,transparent)] opacity-20 animate-grid-slow"></div>
-        {/* Stars */}
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
-      </div>
+    <div className={`min-h-screen w-full flex items-center justify-center transition-colors duration-500 overflow-hidden relative p-6 ${isDark ? 'bg-[#09090b]' : 'bg-zinc-50'}`}>
       
-      {/* The Moon */}
-      <div className="absolute top-[5%] right-[10%] w-[180px] h-[180px] sm:w-[300px] sm:h-[300px] moon animate-float pointer-events-none z-0">
-        {/* Craters */}
-        <div className="moon-crater top-[20%] left-[15%] w-[15%] h-[15%]"></div>
-        <div className="moon-crater top-[45%] left-[40%] w-[25%] h-[25%] opacity-60"></div>
-        <div className="moon-crater top-[70%] left-[20%] w-[10%] h-[10%]"></div>
-        <div className="moon-crater top-[30%] left-[65%] w-[12%] h-[12%] opacity-40"></div>
-        <div className="moon-crater top-[60%] left-[75%] w-[8%] h-[8%]"></div>
+      {/* Background Pattern - Modern Grid */}
+      <div className="absolute inset-0 z-0">
+        <div className={`absolute inset-0 bg-grid-zinc-500/[0.05] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_at_center,black,transparent)]`}></div>
       </div>
 
-      {/* Earth Glow from bottom */}
-      <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[150px] pointer-events-none"></div>
+      {/* Corporate Aesthetics - Zinc Blobs */}
+      <div className={`absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none transition-opacity duration-1000 ${isDark ? 'bg-primary/5 opacity-100' : 'bg-primary/5 opacity-50'}`} />
+      <div className={`absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none transition-opacity duration-1000 ${isDark ? 'bg-indigo-500/5 opacity-100' : 'bg-indigo-500/5 opacity-50'}`} />
 
-      <div className="w-full max-w-[420px] relative z-20 animate-in fade-in zoom-in duration-1000">
-        <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.5)] border border-slate-200">
-          <div className="text-center mb-10 pt-4">
-            <Title level={1} style={{ margin: 0, fontSize: '32px', fontWeight: 900, color: '#0f172a', letterSpacing: '-1.5px' }}>
+      <div className="w-full max-w-[440px] relative z-20 animate-in fade-in zoom-in duration-700">
+        <div className={`p-8 md:p-12 rounded-[48px] shadow-2xl border transition-all duration-300 ${isDark ? 'bg-[#18181b] border-zinc-800 shadow-black/50' : 'bg-white border-zinc-100 shadow-zinc-200/50'}`}>
+          
+          <div className="text-center mb-10">
+             <div className={`inline-flex items-center justify-center w-20 h-20 mb-8 transform hover:rotate-2 transition-transform`}>
+                <img 
+                  src={isDark ? "/logoapp.jpg" : "/logoapplight.jpg"} 
+                  alt="Tea on Tech Logo" 
+                  className="object-contain rounded-[10px]"
+                />
+             </div>
+            
+            <Title level={1} style={{ margin: 0, fontSize: '32px', fontWeight: 900, letterSpacing: '-1px' }} className={isDark ? 'text-zinc-50' : 'text-zinc-900'}>
               {appName}
             </Title>
-            <div className="mt-3 inline-block px-4 py-1 bg-slate-100 rounded-full">
-              <Text style={{ fontSize: '11px', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px' }}>
-                {appTitle}
+            <div className={`mt-3 inline-block px-5 py-1.5 rounded-full border ${isDark ? 'bg-zinc-900/50 border-zinc-800' : 'bg-zinc-100 border-zinc-200'}`}>
+              <Text className={`text-[11px] font-bold uppercase tracking-[0.25em] ${isDark ? 'text-primary' : 'text-zinc-500'}`}>
+                {appSubtitle}
               </Text>
             </div>
           </div>
@@ -76,41 +83,41 @@ export default function LoginPage() {
             layout="vertical"
             initialValues={{ remember: true }}
             onFinish={onFinish}
-            size="middle"
+            size="large"
             autoComplete="off"
             requiredMark={false}
           >
             <Form.Item
               name="username"
               rules={[{ required: true, message: 'Please input your Username or Email!' }]}
-              className="mb-4"
+              className="mb-5"
             >
               <Input 
-                prefix={<UserOutlined className="text-slate-400 mr-2" />} 
+                prefix={<UserOutlined className="text-zinc-500 mr-2" />} 
                 placeholder="Username or Email" 
-                className="rounded-xl h-11 border-slate-200 hover:border-blue-400 focus:border-blue-500 transition-all font-medium"
+                className={`rounded-[18px] h-12 transition-all font-medium border-2 ${isDark ? 'bg-zinc-900/50 border-zinc-800 text-zinc-100 hover:border-primary focus:border-primary' : 'bg-zinc-50 border-zinc-200 hover:border-primary focus:border-primary'}`}
               />
             </Form.Item>
 
             <Form.Item
               name="password"
               rules={[{ required: true, message: 'Please input your Password!' }]}
-              className="mb-4"
+              className="mb-5"
             >
               <Input.Password 
-                prefix={<LockOutlined className="text-slate-400 mr-2" />} 
+                prefix={<LockOutlined className="text-zinc-500 mr-2" />} 
                 placeholder="Password" 
-                className="rounded-xl h-11 border-slate-200 hover:border-blue-400 focus:border-blue-500 transition-all font-medium"
+                className={`rounded-[18px] h-12 transition-all font-medium border-2 ${isDark ? 'bg-zinc-900/50 border-zinc-800 text-zinc-100 hover:border-primary focus:border-primary' : 'bg-zinc-50 border-zinc-200 hover:border-primary focus:border-primary'}`}
               />
             </Form.Item>
 
-            <div className="flex justify-between items-center mb-6 px-1">
+            <div className="flex justify-between items-center mb-8 px-2">
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox className="text-slate-600 font-semibold text-sm">Remember me</Checkbox>
+                <Checkbox className={`font-semibold text-sm ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>Remember me</Checkbox>
               </Form.Item>
               <Link 
                 href="/forgot-password"
-                className="text-blue-600 hover:text-indigo-600 font-bold text-sm transition-all"
+                className="text-primary hover:opacity-80 font-bold text-sm transition-all"
               >
                 Forgot password?
               </Link>
@@ -120,21 +127,28 @@ export default function LoginPage() {
               <Button 
                 type="primary" 
                 htmlType="submit" 
-                className="w-full h-11 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 border-none text-sm font-black shadow-lg shadow-blue-600/20 hover:shadow-xl hover:scale-[1.01] transition-all" 
+                className="w-full h-14 rounded-[20px] bg-primary border-none text-sm font-black shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-[1.02] transition-all group overflow-hidden relative" 
                 loading={loading}
               >
-                LOG IN
+                <span className="relative z-10 uppercase tracking-widest">Login</span>
+                <div className="absolute inset-0 bg-white/10 translate-y-full hover:translate-y-0 transition-transform duration-300" />
               </Button>
             </Form.Item>
           </Form>
         </div>
         
-        <div className="text-center mt-12 bg-white/10 backdrop-blur-md py-1.5 px-6 rounded-full inline-block left-1/2 -translate-x-1/2 relative">
-          <Text style={{ color: '#94a3b8', fontSize: '10px', fontWeight: 600, letterSpacing: '1px' }}>
-            {appCopyright} &copy; {new Date().getFullYear()}
-          </Text>
+        <div className="text-center mt-12">
+            <Text className={`text-[10px] font-bold tracking-[0.3em] uppercase ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>
+                {appCopyright} &copy; {new Date().getFullYear()}
+            </Text>
         </div>
       </div>
+
+      <style jsx global>{`
+        .bg-grid-zinc-500 {
+          background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+        }
+      `}</style>
     </div>
   );
 }

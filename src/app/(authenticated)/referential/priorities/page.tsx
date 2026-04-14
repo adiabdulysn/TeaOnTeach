@@ -55,7 +55,7 @@ export default function PrioritiesPage() {
       dataIndex: 'icon', 
       render: (iconName: string, record: any) => (
         <div 
-          className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-sm border border-slate-50" 
+          className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-sm border border-card-border" 
           style={{ backgroundColor: `${record.color}15`, color: record.color }}
         >
           {getPriorityIcon(iconName)}
@@ -83,12 +83,12 @@ export default function PrioritiesPage() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-card-bg rounded-2xl shadow-sm border border-card-border overflow-hidden transition-colors">
       {/* Module Header */}
-      <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50/30">
+      <div className="p-6 border-b border-card-border flex flex-col md:flex-row md:items-center justify-between gap-4 bg-app-bg/10">
         <div>
-          <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-slate-800">Ticket Priorities</Title>
-          <Text className="text-slate-500 text-sm">Define response levels and urgency ranking for service requests.</Text>
+          <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-text-primary">Ticket Priorities</Title>
+          <Text className="text-text-secondary text-sm">Define response levels and urgency ranking for service requests.</Text>
         </div>
         <Button 
           type="primary" 
@@ -112,7 +112,7 @@ export default function PrioritiesPage() {
             defaultPageSize: 10, 
             showSizeChanger: true, 
             pageSizeOptions: ['10', '20', '50'],
-            showTotal: (total) => <span className="text-slate-500 text-xs font-medium">Total {total} priorities</span>,
+            showTotal: (total) => <span className="text-text-secondary text-xs font-medium">Total {total} priorities</span>,
             className: "px-6 pb-6",
           }}
         />

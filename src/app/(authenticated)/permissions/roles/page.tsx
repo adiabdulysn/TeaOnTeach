@@ -90,12 +90,12 @@ export default function RolesPage() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-card-bg rounded-2xl shadow-sm border border-card-border overflow-hidden transition-colors">
       {/* Module Header Container */}
-      <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50/30">
+      <div className="p-6 border-b border-card-border flex flex-col md:flex-row md:items-center justify-between gap-4 bg-app-bg/10">
         <div>
-          <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-slate-800">Roles & Permissions</Title>
-          <Text className="text-slate-500 text-sm">Define system access levels and manage detailed feature permissions for users.</Text>
+          <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-text-primary">Roles & Permissions</Title>
+          <Text className="text-text-secondary text-sm">Define system access levels and manage detailed feature permissions for users.</Text>
         </div>
         <Button 
           type="primary" 
@@ -119,7 +119,7 @@ export default function RolesPage() {
             defaultPageSize: 10, 
             showSizeChanger: true, 
             pageSizeOptions: ['10', '20', '50', '100'],
-            showTotal: (total) => <span className="text-slate-500 text-xs font-medium">Total {total} roles defined</span>,
+            showTotal: (total) => <span className="text-text-secondary text-xs font-medium">Total {total} roles defined</span>,
             className: "px-6 pb-6",
           }}
         />

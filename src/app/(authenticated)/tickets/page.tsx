@@ -21,6 +21,7 @@ import {
 } from '@ant-design/icons';
 import { Skeleton } from 'antd';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import { getTickets, getTicketSummary, getTicketFilterData } from '@/app/actions/tickets';
 import { getPriorityIcon, getCategoryIcon } from '@/lib/icons';
 import dayjs from 'dayjs';
@@ -29,26 +30,26 @@ const { RangePicker } = DatePicker;
 const { Title, Text } = Typography;
 
 // ── Simple Statistic Mini Card ──────────────────────────────────────────────
-function StatMiniCard({ title, value, color, icon, loading, onClick }: any) {
+function StatMiniCard({ title, value, color, icon, loading, onClick, active }: any) {
   if (loading) return <Skeleton.Button active style={{ height: 100, width: '100%', borderRadius: 20 }} />;
   
   return (
     <div 
       onClick={onClick}
-      className="flex-1 min-w-[160px] bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-pointer"
+      className={`flex-1 min-w-[160px] rounded-2xl p-5 border shadow-sm hover:shadow-md transition-all group cursor-pointer ${active ? 'bg-blue-500/10 border-blue-500/30' : 'bg-card-bg border-card-border'}`}
     >
       <div className="flex items-center gap-4">
         <div 
           className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-sm group-hover:scale-110 transition-transform"
-          style={{ backgroundColor: `${color}15`, color }}
+          style={{ backgroundColor: `${color}25`, color }}
         >
           {icon}
         </div>
         <div className="flex-1 min-w-0">
-          <Text className="text-slate-500 text-[10px] font-bold block leading-none mb-1.5 truncate">
+          <Text className="text-text-secondary text-[10px] font-bold block leading-none mb-1.5 truncate">
             {title}
           </Text>
-          <div className="text-2xl font-black text-slate-800 leading-none">
+          <div className="text-2xl font-black text-text-primary leading-none">
             {value}
           </div>
         </div>
@@ -77,6 +78,8 @@ const ALL_COLUMNS = [
 const DEFAULT_VISIBLE = ['ticket_number', 'status', 'ticket_subject', 'category', 'requestor', 'priority', 'division', 'created_by', 'created_at'];
 
 export default function TicketsDashboard() {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
   const router = useRouter();
   const [data, setData] = useState<any[]>([]);
   const [filtered, setFiltered] = useState<any[]>([]);
@@ -263,8 +266,8 @@ export default function TicketsDashboard() {
       dataIndex: 'ticket_subject',
       key: 'ticket_subject',
       render: (text: string, record: any) => (
-        <div className="cursor-pointer" onClick={() => router.push(`/dashboard/tickets/${record.ticket_id}`)}>
-          <Text strong className="block text-slate-700 hover:text-blue-600 transition-colors leading-tight mb-0.5">{text}</Text>
+        <div className="cursor-pointer" onClick={() => router.push(`/tickets/${record.ticket_id}`)}>
+          <Text strong className="block text-text-primary hover:text-blue-600 transition-colors leading-tight mb-0.5">{text}</Text>
           <Text type="secondary" className="text-[11px] uppercase tracking-tight font-medium">
             {record.ticket_type_name}
           </Text>
@@ -279,7 +282,7 @@ export default function TicketsDashboard() {
       render: (text: string, record: any) => (
         <div className="flex items-center gap-2">
           <span className="text-base" style={{ color: record.category_color }}>{getCategoryIcon(record.category_icon)}</span>
-          <Text className="text-slate-600 text-sm">{text}</Text>
+          <Text className="text-text-secondary text-sm">{text}</Text>
         </div>
       ),
     },
@@ -288,7 +291,7 @@ export default function TicketsDashboard() {
       dataIndex: 'requestor_name',
       key: 'requestor',
       width: 140,
-      render: (text: string) => <Text className="text-slate-600 font-medium">{text}</Text>,
+      render: (text: string) => <Text className="text-text-primary font-medium">{text}</Text>,
     },
     priority: {
       title: 'Priority',
@@ -312,7 +315,7 @@ export default function TicketsDashboard() {
       dataIndex: 'division_name',
       key: 'division',
       width: 140,
-      render: (text: string) => <Text className="text-slate-500 text-sm">{text}</Text>,
+      render: (text: string) => <Text className="text-text-secondary text-sm">{text}</Text>,
     },
     start_date: {
       title: 'Start Date',
@@ -343,10 +346,10 @@ export default function TicketsDashboard() {
       width: 150,
       render: (text: string) => (
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 text-[10px] font-bold flex-shrink-0">
+          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${isDark ? 'bg-blue-900/40 text-blue-400' : 'bg-blue-50 text-blue-500'}`}>
             {text ? text.charAt(0).toUpperCase() : '?'}
           </div>
-          <Text className="text-slate-600 text-sm">{text || <span className="text-slate-300">—</span>}</Text>
+          <Text className="text-text-secondary text-sm">{text || <span className="text-text-secondary opacity-30">—</span>}</Text>
         </div>
       ),
     },
@@ -407,12 +410,12 @@ export default function TicketsDashboard() {
           Reset
         </Button>
       </div>
-      <div className="space-y-1.5">
+      <div className="space-y-1.5 mt-2">
         {ALL_COLUMNS.map(col => (
-          <div key={col.key} className="flex items-center gap-3 px-1 py-1.5 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer" onClick={() => toggleCol(col.key)}>
-            <HolderOutlined className="text-slate-300 cursor-grab" />
+          <div key={col.key} className="flex items-center gap-3 px-1 py-1.5 rounded-lg hover:bg-app-bg transition-colors cursor-pointer" onClick={() => toggleCol(col.key)}>
+            <HolderOutlined className="text-text-secondary opacity-30 cursor-grab" />
             <Checkbox checked={visibleCols.includes(col.key)} onChange={() => toggleCol(col.key)} />
-            <Text className="text-sm text-slate-700 flex-1 select-none">{col.label}</Text>
+            <Text className="text-sm text-text-primary flex-1 select-none">{col.label}</Text>
           </div>
         ))}
       </div>
@@ -458,14 +461,14 @@ export default function TicketsDashboard() {
 
       {/* ── Advanced Filter Panel ── */}
       {isFilterVisible && (
-        <Card className="rounded-3xl shadow-sm border-slate-100 overflow-visible mb-6">
+        <Card className="rounded-3xl shadow-sm border-card-border bg-card-bg overflow-visible mb-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDark ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
                 <FilterOutlined style={{ fontSize: '18px' }} />
               </div>
               <div>
-                <Text strong className="text-slate-800 block leading-none mb-1">Advanced Filtering</Text>
+                <Text strong className="text-text-primary block leading-none mb-1">Advanced Filtering</Text>
               </div>
             </div>
             <Button 
@@ -481,7 +484,7 @@ export default function TicketsDashboard() {
 
           <Row gutter={[20, 20]}>
             <Col xs={24} sm={12} md={6}>
-              <Text className="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2 px-1">Ticket Number</Text>
+              <Text className="text-[11px] font-bold text-text-secondary uppercase tracking-widest block mb-2 px-1 opacity-60">Ticket Number</Text>
               <Input 
                 placeholder="Ex: 202404..." 
                 prefix={<FileSearchOutlined className="text-slate-300" />}
@@ -590,21 +593,21 @@ export default function TicketsDashboard() {
       )}
 
       {/* ── Table Container ── */}
-      <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden mt-5">
-        <div className="p-6 border-b border-slate-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-card-bg rounded-3xl shadow-sm border border-card-border overflow-hidden mt-5 transition-colors">
+        <div className="p-6 border-b border-card-border flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-slate-800 tracking-tight">
+            <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-text-primary tracking-tight">
               All Tickets
             </Title>
           </div>
 
           <Space size="small">
             <Input
-              prefix={<SearchOutlined className="text-slate-300" />}
+              prefix={<SearchOutlined className="text-text-secondary opacity-40" />}
               placeholder="Search tickets..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="h-10 rounded-xl bg-slate-50 border-none w-60"
+              className="h-10 rounded-xl bg-app-bg border-none w-60 text-text-primary"
               allowClear
             />
 
@@ -669,13 +672,13 @@ export default function TicketsDashboard() {
             loading={loading}
             scroll={{ x: 'max-content' }}
             onRow={(record) => ({
-              className: 'cursor-pointer hover:bg-slate-50/80 transition-colors',
+              className: 'cursor-pointer transition-colors',
             })}
             pagination={{
               pageSize: 10,
               className: 'px-6 pb-4',
               showTotal: (total) => (
-                <Text className="text-xs text-slate-400">Total {total} tickets trackable in this sequence</Text>
+                <Text className="text-xs text-text-secondary opacity-60">Total {total} tickets trackable in this sequence</Text>
               ),
             }}
             className="px-2"

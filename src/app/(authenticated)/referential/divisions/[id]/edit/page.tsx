@@ -58,13 +58,13 @@ export default function EditDivisionPage({ params }: { params: Promise<{ id: str
                 onClick={() => router.back()} 
                 className="hover:bg-slate-100 rounded-full"
             />
-            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>Edit Division</Title>
+            <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-text-primary">Edit Division</Title>
           </div>
-          <Text className="text-slate-500 ml-10">Updating organizational unit details.</Text>
+          <Text type="secondary" className="ml-10">Updating organizational unit details.</Text>
         </Space>
       </div>
 
-      <Card className="shadow-sm border-slate-100 rounded-2xl overflow-hidden p-4">
+      <Card className="shadow-sm border-card-border rounded-2xl overflow-hidden p-4">
         {fetching ? (
           <Skeleton active paragraph={{ rows: 2 }} />
         ) : (
@@ -77,14 +77,14 @@ export default function EditDivisionPage({ params }: { params: Promise<{ id: str
             <div className="p-2">
               <Form.Item
                 name="division_name"
-                label={<span className="font-semibold text-slate-700">Division Name</span>}
+                label="Division Name"
                 rules={[{ required: true, message: 'Please enter division name' }]}
               >
                 <Input placeholder="e.g. Finance, Human Resources" className="h-10 rounded-lg text-base" />
               </Form.Item>
             </div>
 
-            <div className="border-t border-slate-50 mt-8 pt-6 flex justify-end gap-3 px-2">
+            <div className="border-t border-card-border mt-8 pt-6 flex justify-end gap-3 px-2">
               <Button 
                 onClick={() => router.back()} 
                 className="h-10 px-6 rounded-lg font-medium"

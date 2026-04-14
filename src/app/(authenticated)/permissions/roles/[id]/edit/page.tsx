@@ -87,7 +87,7 @@ export default function EditRolePage() {
   };
 
   if (fetching) {
-     return <div className="flex h-64 items-center justify-center"><Spin size="large" /></div>;
+     return <div className="flex h-64 items-center justify-center bg-app-bg min-h-screen"><Spin size="large" /></div>;
   }
 
   return (
@@ -95,38 +95,39 @@ export default function EditRolePage() {
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
           <Button 
+            type="text"
             icon={<ArrowLeftOutlined />} 
             onClick={() => router.push('/permissions/roles')} 
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border-slate-200 text-slate-500 hover:text-blue-600 transition-colors"
+            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-card-border/50 text-text-secondary transition-colors"
           />
           <div>
-            <Title level={3} style={{ margin: 0, fontWeight: 600 }} className="text-slate-800">Edit Role</Title>
-            <Text className="text-sm text-slate-500">Manage access control and privileges for this designation.</Text>
+            <Title level={3} style={{ margin: 0, fontWeight: 700 }} className="text-text-primary">Edit Role</Title>
+            <Text type="secondary" className="text-sm">Manage access control and privileges for this designation.</Text>
           </div>
         </div>
       </div>
 
-      <Card className="shadow-sm border border-slate-200 rounded-2xl overflow-hidden" styles={{ body: { padding: 0 } }}>
+      <Card className="shadow-sm border-card-border rounded-2xl overflow-hidden bg-card-bg" styles={{ body: { padding: 0 } }}>
         <Form 
           form={form} 
           layout="vertical" 
           onFinish={handleFinish}
           requiredMark={false}
-          className="bg-white"
+          className="bg-transparent"
         >
           <div className="p-6 md:p-10 space-y-10">
              {/* General Info Section */}
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-slate-100">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-card-border">
                <div className="md:col-span-1">
-                 <h3 className="text-base font-semibold text-slate-800">Role Details</h3>
-                 <p className="text-sm text-slate-500 mt-1">Provide a designation name and purpose for this role.</p>
+                 <h3 className="text-base font-semibold text-text-primary">Role Details</h3>
+                 <p className="text-sm text-text-secondary mt-1">Provide a designation name and purpose for this role.</p>
                </div>
                <div className="md:col-span-2 space-y-5 max-w-lg">
-                  <Form.Item name="role_name" label={<span className="font-medium text-slate-700">Role Name</span>} rules={[{ required: true }]}>
-                    <Input placeholder="e.g. Administrator, IT Support" size="large" className="rounded-lg" />
+                  <Form.Item name="role_name" label="Role Name" rules={[{ required: true }]}>
+                    <Input placeholder="e.g. Administrator, IT Support" size="large" className="rounded-lg bg-app-bg border-card-border text-text-primary placeholder:text-text-secondary/50" />
                   </Form.Item>
-                  <Form.Item name="description" label={<span className="font-medium text-slate-700">Description</span>}>
-                    <Input.TextArea rows={4} placeholder="Brief description about the scope of this role..." className="rounded-lg" />
+                  <Form.Item name="description" label="Description">
+                    <Input.TextArea rows={4} placeholder="Brief description about the scope of this role..." className="rounded-lg bg-app-bg border-card-border text-text-primary placeholder:text-text-secondary/50" />
                   </Form.Item>
                </div>
              </div>
@@ -134,18 +135,18 @@ export default function EditRolePage() {
              {/* Permissions Section */}
              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                <div className="md:col-span-1">
-                 <h3 className="text-base font-semibold text-slate-800">Feature Access</h3>
-                 <p className="text-sm text-slate-500 mt-1">Select the specific actions this role is allowed to perform across the system.</p>
+                 <h3 className="text-base font-semibold text-text-primary">Feature Access</h3>
+                 <p className="text-sm text-text-secondary mt-1">Select the specific actions this role is allowed to perform across the system.</p>
                  <div className="mt-6 flex flex-col gap-3">
                    <Button 
                      onClick={() => form.setFieldValue('permissions', ALL_PERMISSIONS)} 
-                     className="w-full text-blue-600 border-blue-200 hover:bg-blue-50 font-medium rounded-lg"
+                     className="w-full text-primary border-primary/20 hover:bg-primary/5 bg-transparent font-medium rounded-lg"
                    >
                      Select All Permissions
                    </Button>
                    <Button 
                      onClick={() => form.setFieldValue('permissions', [])} 
-                     className="w-full text-slate-500 rounded-lg"
+                     className="w-full text-text-secondary border-card-border hover:bg-card-border/30 bg-transparent rounded-lg"
                    >
                      Deselect All
                    </Button>
@@ -157,14 +158,14 @@ export default function EditRolePage() {
                       <Row gutter={[32, 48]}>
                         {PERMISSION_MODULES.map(module => (
                           <Col xs={24} sm={12} lg={8} key={module.key}>
-                            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">
+                            <div className="text-[11px] font-bold text-text-secondary/50 uppercase tracking-widest mb-4">
                               {module.title}
                             </div>
                             <div className="flex flex-col gap-3">
                               {module.actions.map(action => {
                                 const label = action.replace(/_/g, ' ');
                                 return (
-                                  <Checkbox value={action} key={action} className="m-0 font-medium text-slate-700 hover:text-blue-600 transition-colors">
+                                  <Checkbox value={action} key={action} className="m-0 font-medium text-text-secondary hover:text-primary transition-colors">
                                     <span className="capitalize">{label}</span>
                                   </Checkbox>
                                 );
@@ -179,11 +180,11 @@ export default function EditRolePage() {
              </div>
           </div>
           
-          <div className="p-6 md:px-10 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
-            <Button className="rounded-lg font-medium" onClick={() => router.push('/permissions/roles')}>
+          <div className="p-6 md:px-10 bg-app-bg/50 border-t border-card-border flex justify-end gap-3">
+            <Button className="rounded-lg font-medium border-card-border bg-card-bg text-text-secondary hover:text-text-primary" onClick={() => router.push('/permissions/roles')}>
               Cancel
             </Button>
-            <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={loading} className="rounded-lg font-medium px-6">
+            <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={loading} className="rounded-lg font-medium px-6 bg-primary border-none text-white shadow-lg shadow-primary/20">
               Save Changes
             </Button>
           </div>

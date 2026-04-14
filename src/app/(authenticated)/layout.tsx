@@ -11,20 +11,27 @@ import {
   MenuUnfoldOutlined,
   CoffeeOutlined,
   DatabaseOutlined,
-  HomeOutlined
+  HomeOutlined,
+  SunOutlined,
+  MoonOutlined
 } from '@ant-design/icons';
 import { useRouter, usePathname } from 'next/navigation';
 import { logout, getCurrentUser } from '../actions/auth';
 import { useEffect } from 'react';
+import { useTheme } from 'next-themes';
 
 const { Header, Sider, Content } = Layout;
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
+  const { theme: currentTheme, setTheme, resolvedTheme } = useTheme();
   const router = useRouter();
 
+  // Handle hydration
   useEffect(() => {
+    setMounted(true);
     const fetchUser = async () => {
       const userData = await getCurrentUser();
       if (userData) setUser(userData);
@@ -100,19 +107,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   ];
 
   return (
-    <Layout className="min-h-screen bg-slate-50">
+    <Layout className="min-h-screen bg-app-bg transition-colors duration-300">
       <Sider 
         trigger={null} 
         collapsible 
         collapsed={collapsed}
-        theme="light"
+        theme={mounted ? (resolvedTheme === 'dark' ? 'dark' : 'light') : 'light'}
         width={260}
-        className="border-r border-slate-200 shadow-sm z-20"
-        style={{ overflow: 'auto', height: '100vh', position: 'sticky', top: 0, left: 0 }}
+        className="border-r border-card-border shadow-sm z-20"
+        style={{ overflow: 'auto', height: '100vh', position: 'sticky', top: 0, left: 0, backgroundColor: 'var(--sidebar-bg)' }}
       >
-        <div className="flex h-[72px] items-center px-6 border-b border-transparent transition-all mt-2">
+        <div className="flex h-[72px] items-center px-6 border-b border-card-border transition-all mt-2">
           {!collapsed && (
-            <span className="font-black text-[20px] tracking-tighter whitespace-nowrap">
+            <span className="font-black text-[20px] tracking-tighter whitespace-nowrap text-text-primary">
               {process.env.NEXT_PUBLIC_APP_NAME || 'Tea on Tech'}
             </span>
           )}
@@ -126,6 +133,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 itemMarginInline: 16,
                 itemHeight: 44,
                 darkItemBg: 'transparent',
+                activeBarBorderWidth: 0,
+                itemSelectedColor: 'var(--primary)',
+                itemColor: 'var(--text-secondary)',
+                itemHoverColor: 'var(--primary)',
+                itemSelectedBg: 'rgba(22, 119, 255, 0.1)',
               },
             },
           }}
@@ -136,25 +148,43 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             defaultOpenKeys={['ticketsGroup', 'masterGroup']}
             items={menuItems}
             onClick={handleMenuClick}
-            className="border-none mt-6 font-medium text-slate-600"
+            className="border-none mt-6 font-medium bg-transparent"
           />
         </ConfigProvider>
       </Sider>
       
       <Layout>
         <Header 
-          className="flex items-center justify-between px-6 shadow-sm z-10 sticky top-0 border-b border-slate-200/60 transition-all"
-          style={{ background: 'rgba(255, 255, 255, 0.8)', backdropFilter: 'blur(8px)', height: '72px', lineHeight: '72px' }}
+          className="flex items-center justify-between px-6 shadow-sm z-10 sticky top-0 border-b border-card-border transition-all"
+          style={{ 
+            background: mounted 
+              ? (resolvedTheme === 'dark' ? 'rgba(9, 9, 11, 0.82)' : 'rgba(255, 255, 255, 0.82)') 
+              : 'rgba(255, 255, 255, 0.82)', 
+            backdropFilter: 'blur(8px)', 
+            height: '72px', 
+            lineHeight: '72px' 
+          }}
         >
           <div className="flex items-center gap-6">
             <Button
               type="text"
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => setCollapsed(!collapsed)}
+              className="text-text-secondary"
             />
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            {/* Theme Toggle */}
+            {mounted && (
+              <Button
+                type="text"
+                icon={resolvedTheme === 'dark' ? <SunOutlined className="text-yellow-400" /> : <MoonOutlined className="text-text-secondary" />}
+                onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+                className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-card-bg transition-all"
+              />
+            )}
+
             <Dropdown
               menu={{
                 items: [
@@ -167,14 +197,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               placement="bottomRight"
               trigger={['click']}
             >
-              <div className="flex items-center gap-3 cursor-pointer hover:bg-slate-100 py-1.5 px-3 rounded-full transition-all border border-transparent hover:border-slate-200">
+              <div className="flex items-center gap-3 cursor-pointer hover:bg-card-bg py-1.5 px-3 rounded-full transition-all border border-transparent hover:border-card-border">
                 <Avatar 
                   src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user?.full_name || 'User')}&radius=50&backgroundColor=1677ff`}
                   className="shadow-sm" 
                 />
                 <div className="hidden sm:flex flex-col leading-tight mr-1">
-                   <span className="text-[13px] font-semibold text-slate-700">{user?.full_name || 'Administrator'}</span>
-                   <span className="text-[11px] text-slate-500 font-medium">{user?.role_name || 'User'}</span>
+                   <span className="text-[13px] font-semibold text-text-primary">{user?.full_name || 'Administrator'}</span>
+                   <span className="text-[11px] text-text-secondary font-medium">{user?.role_name || 'User'}</span>
                 </div>
               </div>
             </Dropdown>

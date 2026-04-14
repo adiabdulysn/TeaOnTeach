@@ -8,6 +8,15 @@ const publicPaths = ['/login', '/forgot-password', '/reset-password', '/api/publ
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
+  // Ignore static assets and next internal paths
+  if (
+    pathname.includes('.') || 
+    pathname.startsWith('/_next') || 
+    pathname === '/favicon.ico'
+  ) {
+    return NextResponse.next();
+  }
+  
   // Check if path is public
   const isPublicPath = publicPaths.some(path => pathname.startsWith(path));
   
@@ -44,6 +53,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)',
   ],
 };

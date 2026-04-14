@@ -60,9 +60,9 @@ export default function EditCategoryPage({ params }: { params: Promise<{ id: str
                 onClick={() => router.back()} 
                 className="hover:bg-slate-100 rounded-full"
             />
-            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>Edit Category</Title>
+            <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-text-primary">Edit Category</Title>
           </div>
-          <Text className="text-slate-500 ml-10">Updating category classification details.</Text>
+          <Text type="secondary" className="ml-10">Updating category classification details.</Text>
         </Space>
       </div>
 
@@ -79,7 +79,7 @@ export default function EditCategoryPage({ params }: { params: Promise<{ id: str
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2">
               <Form.Item
                 name="category_name"
-                label={<span className="font-semibold text-slate-700">Category Name</span>}
+                label="Category Name"
                 rules={[{ required: true, message: 'Please enter category name' }]}
               >
                 <Input placeholder="e.g. Hardware Support" className="h-10 rounded-lg text-base" />
@@ -87,14 +87,14 @@ export default function EditCategoryPage({ params }: { params: Promise<{ id: str
 
               <Form.Item
                 name="icon"
-                label={<span className="font-semibold text-slate-700">Category Icon</span>}
+                label="Category Icon"
                 rules={[{ required: true, message: 'Please select an icon' }]}
               >
                 <Select className="h-10" placeholder="Select an icon">
                   {CATEGORY_ICONS.map(item => (
                     <Select.Option key={item.name} value={item.name}>
                       <Space>
-                        <span className="text-blue-600">{item.icon}</span>
+                        <span className="text-primary">{item.icon}</span>
                         {item.label}
                       </Space>
                     </Select.Option>
@@ -104,15 +104,15 @@ export default function EditCategoryPage({ params }: { params: Promise<{ id: str
 
               <Form.Item
                 name="color"
-                label={<span className="font-semibold text-slate-700">Identification Color</span>}
+                label="Identification Color"
                 rules={[{ required: true }]}
-                extra={<Text className="text-slate-400 italic text-xs">Used for icons and labels</Text>}
+                extra={<Text type="secondary" italic className="text-xs">Used for icons and labels</Text>}
               >
-                <Input type="color" className="w-16 h-10 p-1 rounded-lg border-slate-200" />
+                <Input type="color" className="w-16 h-10 p-1 rounded-lg border-card-border bg-app-bg" />
               </Form.Item>
             </div>
 
-            <div className="border-t border-slate-50 mt-8 pt-6 flex justify-end gap-3 px-2">
+            <div className="border-t border-card-border mt-8 pt-6 flex justify-end gap-3 px-2">
               <Button 
                 onClick={() => router.back()} 
                 className="h-10 px-6 rounded-lg font-medium"

@@ -24,7 +24,7 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
           getRoles()
         ]);
         
-        setRoles(rolesData);
+        setRoles(rolesData || []);
         
         if (userData) {
           form.setFieldsValue(userData);
@@ -63,15 +63,15 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
                 type="text" 
                 icon={<ArrowLeftOutlined />} 
                 onClick={() => router.back()} 
-                className="hover:bg-slate-100 rounded-full"
+                className="hover:bg-card-border/50 rounded-full"
             />
-            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>Modify User Account</Title>
+            <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-text-primary">Modify User Account</Title>
           </div>
-          <Text className="text-slate-500 ml-10">Adjust account details, roles, and security settings for this user.</Text>
+          <Text type="secondary" className="ml-10">Adjust account details, roles, and security settings for this user.</Text>
         </Space>
       </div>
 
-      <Card className="shadow-sm border-slate-100 rounded-2xl overflow-hidden p-6">
+      <Card className="shadow-sm border-card-border rounded-2xl overflow-hidden p-6 bg-card-bg">
         {fetching ? (
           <Skeleton active paragraph={{ rows: 6 }} />
         ) : (
@@ -84,41 +84,41 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
               <Form.Item
                 name="full_name"
-                label={<span className="font-semibold text-slate-700">Full Name</span>}
+                label="Full Name"
                 rules={[{ required: true, message: 'Please enter full name' }]}
                 className="md:col-span-2"
               >
-                <Input placeholder="e.g. John Doe" className="h-10 rounded-lg text-base" />
+                <Input placeholder="e.g. John Doe" className="h-10 rounded-lg text-base bg-app-bg border-card-border text-text-primary" />
               </Form.Item>
 
               <Form.Item
                 name="user_name"
-                label={<span className="font-semibold text-slate-700">Username</span>}
+                label="Username"
                 rules={[{ required: true, message: 'Please enter username' }]}
               >
-                <Input placeholder="johndoe" className="h-10 rounded-lg text-base bg-slate-50" />
+                <Input placeholder="johndoe" className="h-10 rounded-lg text-base bg-app-bg border-card-border text-text-primary" disabled={true} />
               </Form.Item>
 
               <Form.Item
                 name="email"
-                label={<span className="font-semibold text-slate-700">Email Address</span>}
+                label="Email Address"
                 rules={[
                   { required: true, message: 'Please enter email' },
                   { type: 'email', message: 'Please enter a valid email' }
                 ]}
               >
-                <Input placeholder="john@example.com" className="h-10 rounded-lg text-base" />
+                <Input placeholder="john@example.com" className="h-10 rounded-lg text-base bg-app-bg border-card-border text-text-primary" />
               </Form.Item>
 
               <Form.Item
                 name="role_id"
-                label={<span className="font-semibold text-slate-700">Assign Role</span>}
+                label="Assign Role"
                 rules={[{ required: true, message: 'Please select a role' }]}
               >
-                <Select placeholder="Select user role" className="h-10">
+                <Select placeholder="Select user role" className="h-10 custom-select">
                   {roles.map(role => (
                     <Select.Option key={role.role_id} value={role.role_id}>
-                      {role.role_name}
+                      <span className="text-text-primary">{role.role_name}</span>
                     </Select.Option>
                   ))}
                 </Select>
@@ -126,25 +126,25 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
 
               <Form.Item
                 name="password"
-                label={<span className="font-semibold text-slate-700">Reset Password</span>}
-                extra={<span className="text-slate-400 italic text-xs">Leave blank to keep the current password</span>}
+                label="Reset Password"
+                extra={<Text type="secondary" italic className="text-xs">Leave blank to keep the current password</Text>}
               >
-                <Input.Password placeholder="••••••••" className="h-10 rounded-lg text-base" />
+                <Input.Password placeholder="••••••••" className="h-10 rounded-lg text-base bg-app-bg border-card-border text-text-primary" />
               </Form.Item>
 
               <Form.Item
                 name="is_active"
-                label={<span className="font-semibold text-slate-700">Account Status</span>}
+                label="Account Status"
                 valuePropName="checked"
               >
                 <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
               </Form.Item>
             </div>
 
-            <div className="border-t border-slate-50 mt-8 pt-6 flex justify-end gap-3">
+            <div className="border-t border-card-border mt-8 pt-6 flex justify-end gap-3">
               <Button 
                 onClick={() => router.back()} 
-                className="h-10 px-6 rounded-lg font-medium"
+                className="h-10 px-6 rounded-lg font-medium border-card-border text-text-secondary hover:text-text-primary bg-card-bg transition-all"
               >
                 Discard
               </Button>
@@ -153,7 +153,7 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
                 htmlType="submit" 
                 loading={loading} 
                 icon={<SaveOutlined />}
-                className="h-10 px-8 rounded-lg font-semibold shadow-md shadow-blue-500/20"
+                className="h-10 px-8 rounded-lg font-semibold shadow-md shadow-primary/20 bg-primary border-none"
               >
                 Update Account
               </Button>

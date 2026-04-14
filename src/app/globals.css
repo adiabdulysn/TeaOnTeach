@@ -1,35 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Common */
+  --primary: #1677ff;
+  
+  /* Light Mode (Corporate) */
+  --app-bg: #f8fafc;
+  --card-bg: #ffffff;
+  --card-border: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --header-bg: rgba(255, 255, 255, 0.82);
+  --sidebar-bg: #ffffff;
+}
+
+.dark {
+  /* Dark Mode (Laravel Filament Style - Zinc) */
+  --app-bg: #09090b;       /* Zinc 950 */
+  --card-bg: #18181b;      /* Zinc 900 */
+  --card-border: #27272a;  /* Zinc 800 */
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --header-bg: rgba(9, 9, 11, 0.82);
+  --sidebar-bg: #09090b;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-app-bg: var(--app-bg);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 @layer base {
   body {
-    background: var(--background);
-    color: var(--foreground);
+    background-color: var(--app-bg);
+    color: var(--text-primary);
     font-family: Arial, Helvetica, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
 @layer utilities {
-  .bg-grid-white {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.04)'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
+  .bg-grid-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='currentColor' stroke-opacity='0.04'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
   }
 
   @keyframes grid-movement {
@@ -50,12 +68,126 @@
     animation: float 10s ease-in-out infinite;
   }
 
-  /* Space/Moon Theme */
-  .moon {
-    @apply relative rounded-full bg-gradient-to-br from-slate-100 to-slate-400 shadow-[0_0_80px_rgba(255,255,255,0.2)];
+  /* Ant Design Table Overrides */
+  .ant-table-wrapper .ant-table {
+    background: transparent !important;
+    color: var(--text-primary) !important;
   }
 
-  .moon-crater {
-    @apply absolute rounded-full bg-slate-500/10 shadow-inner;
+  .ant-table-wrapper .ant-table-thead > tr > th {
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+    border-bottom: 1px solid var(--card-border) !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    font-weight: 700 !important;
+  }
+
+  /* Hover State Fixes */
+  .ant-table-wrapper .ant-table-tbody > tr > td {
+    background: transparent !important; /* Force transparent as base */
+    border-bottom: 1px solid var(--card-border) !important;
+    transition: background-color 0.2s ease !important;
+  }
+
+  /* Dark mode specific hover - Much more subtle */
+  .dark .ant-table-wrapper .ant-table-tbody > tr:hover > td {
+    background: rgba(255, 255, 255, 0.04) !important; /* Near invisible white/zinc */
+    backdrop-filter: blur(4px);
+  }
+
+  .dark .ant-table-wrapper .ant-table-tbody > tr:hover > td:first-child {
+    box-shadow: inset 4px 0 0 0 var(--primary) !important;
+  }
+
+  /* Light mode specific hover */
+  html.light .ant-table-wrapper .ant-table-tbody > tr:hover > td {
+    background: #f1f5f9 !important; /* Slate 100 */
+  }
+
+  .ant-table-wrapper .ant-table-tbody > tr.ant-table-row-selected > td {
+    background: rgba(22, 119, 255, 0.1) !important;
+  }
+
+  /* Pagination */
+  .ant-pagination .ant-pagination-item-active {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+  }
+  .ant-pagination .ant-pagination-item-active a {
+    color: #fff !important;
+  }
+  .ant-pagination .ant-pagination-item {
+    background: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+  }
+  .ant-pagination .ant-pagination-item a, 
+  .ant-pagination .ant-pagination-prev button,
+  .ant-pagination .ant-pagination-next button {
+    color: var(--text-secondary) !important;
+  }
+
+  /* Empty State */
+  .ant-empty-description {
+    color: var(--text-secondary) !important;
+  }
+
+  /* Ant Design Global Form & Typography Overrides */
+  .ant-form-item .ant-form-item-label > label {
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+  }
+
+  .ant-typography {
+    color: var(--text-primary) !important;
+  }
+
+  .ant-typography-secondary, .ant-typography.text-secondary {
+    color: var(--text-secondary) !important;
+  }
+
+  /* Ant Design Card Override */
+  .ant-card {
+    background: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .ant-card-head {
+    border-bottom-color: var(--card-border) !important;
+    color: var(--text-primary) !important;
+  }
+
+  /* Dividers */
+  .ant-divider {
+    border-top-color: var(--card-border) !important;
+  }
+
+  /* Skeleton */
+  .ant-skeleton .ant-skeleton-content .ant-skeleton-title,
+  .ant-skeleton .ant-skeleton-content .ant-skeleton-paragraph > li {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  /* Dropdowns & Modals */
+  .ant-select-dropdown, .ant-popover-inner, .ant-modal-content {
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* Message / Toast Overrides */
+  .ant-message-notice-content {
+    background-color: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--card-border) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    border-radius: 12px !important;
+    backdrop-filter: blur(8px) !important;
+  }
+
+  .ant-message-custom-content > span:last-child {
+    color: var(--text-primary) !important;
   }
 }

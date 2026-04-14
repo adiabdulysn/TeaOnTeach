@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, Form, Input, Button, Typography, Space, Avatar, Divider, message, Tabs, Row, Col, Alert } from 'antd';
+import { Card, Form, Input, Button, Typography, Space, Avatar, Divider, message, Tabs, Row, Col, Alert, Skeleton } from 'antd';
 import { 
   UserOutlined, 
   LockOutlined, 
@@ -51,7 +51,6 @@ export default function ProfilePage() {
       const result = await updateUserProfile(values);
       if (result.success) {
         message.success('Profile updated successfully');
-        // Update local state
         setUser({ ...user, ...values });
       } else {
         message.error(result.error || 'Failed to update profile');
@@ -82,53 +81,53 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <Card className="rounded-3xl shadow-sm border-slate-100 p-8">
-        <Space direction="vertical" align="center" style={{ width: '100%' }}>
-          <Avatar size={80} icon={<UserOutlined />} />
-          <div className="h-4 w-32 bg-slate-100 rounded animate-pulse mt-4" />
-          <div className="h-3 w-48 bg-slate-50 rounded animate-pulse mt-2" />
-        </Space>
-      </Card>
+      <div className="mx-auto max-w-6xl">
+        <Skeleton active avatar paragraph={{ rows: 10 }} />
+      </div>
     );
   }
 
   return (
-    <div className="mx-auto space-y-6">
-      <Title level={3} className="font-bold text-slate-800 tracking-tight mb-0">
+    <div className="mx-auto space-y-6 max-w-6xl">
+      <Title level={3} style={{ fontWeight: 700 }} className="text-text-primary tracking-tight mb-0">
         Account Settings
       </Title>
       
       <Row gutter={[24, 24]}>
         {/* Left Panel: Profile Overview */}
         <Col xs={24} md={8}>
-          <Card className="rounded-3xl shadow-sm border-slate-100 text-center py-6">
+          <Card className="rounded-3xl shadow-sm border-card-border bg-card-bg text-center py-6">
             <Avatar 
               size={100} 
               src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user?.full_name || 'User')}&radius=50&backgroundColor=1677ff`}
-              className="border-4 mb-2"
+              className="border-4 border-app-bg mb-2"
             />
-            <Title level={4} style={{ margin: '16px 0 0' }} className="font-bold text-slate-800">
+            <Title level={4} style={{ margin: '16px 0 0', fontWeight: 700 }} className="text-text-primary">
               {user?.full_name}
             </Title>
-            <Text type="secondary" className="block text-sm font-medium mb-4">
+            <Text type="secondary" className="block text-sm font-medium mb-4 uppercase tracking-wider">
               {user?.role_name}
             </Text>
             
-            <Divider className="my-4" />
+            <Divider className="border-card-border my-4" />
             
-            <div className="text-left space-y-3 px-2">
+            <div className="text-left space-y-4 px-4">
               <div className="flex items-center gap-3">
-                <SafetyCertificateOutlined className="text-slate-400" />
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                  <SafetyCertificateOutlined />
+                </div>
                 <div className="flex flex-col">
-                  <Text className="text-[10px] uppercase font-bold text-slate-400 tracking-widest leading-none">Role Access</Text>
-                  <Text className="font-medium text-slate-700">{user?.role_name}</Text>
+                  <Text className="text-[10px] uppercase font-bold text-text-secondary/50 tracking-widest leading-none">Role Access</Text>
+                  <Text className="font-medium text-text-primary mt-1">{user?.role_name}</Text>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <MailOutlined className="text-slate-400" />
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                  <MailOutlined />
+                </div>
                 <div className="flex flex-col">
-                  <Text className="text-[10px] uppercase font-bold text-slate-400 tracking-widest leading-none">Email Address</Text>
-                  <Text className="font-medium text-slate-700">{user?.email}</Text>
+                  <Text className="text-[10px] uppercase font-bold text-text-secondary/50 tracking-widest leading-none">Email Address</Text>
+                  <Text className="font-medium text-text-primary mt-1">{user?.email}</Text>
                 </div>
               </div>
             </div>
@@ -137,25 +136,26 @@ export default function ProfilePage() {
 
         {/* Right Panel: Forms */}
         <Col xs={24} md={16}>
-          <Card className="rounded-3xl shadow-sm border-slate-100 overflow-hidden">
+          <Card className="rounded-3xl shadow-sm border-card-border bg-card-bg overflow-hidden p-0" styles={{ body: { padding: 0 } }}>
             <Tabs
               defaultActiveKey="general"
-              className="custom-tabs px-2"
+              className="custom-tabs"
               items={[
                 {
                   key: 'general',
                   label: (
-                    <span className="flex items-center gap-2 px-2 py-1">
+                    <span className="flex items-center gap-2 px-6 py-4">
                       <UserOutlined /> General Info
                     </span>
                   ),
                   children: (
-                    <div className="p-4">
+                    <div className="p-8">
                       <Form
                         form={form}
                         layout="vertical"
                         onFinish={onUpdateProfile}
                         requiredMark={false}
+                        className="bg-transparent"
                       >
                          <Form.Item
                           label="Username"
@@ -163,9 +163,10 @@ export default function ProfilePage() {
                           rules={[{ required: true, message: 'Please enter your username' }]}
                         >
                           <Input 
-                            prefix={<IdcardOutlined className="text-slate-300" />} 
+                            prefix={<IdcardOutlined className="text-text-secondary/50" />} 
                             placeholder="Your username" 
-                            className="h-11 rounded-xl"
+                            className="h-11 rounded-xl bg-app-bg border-card-border text-text-primary"
+                            disabled
                           />
                         </Form.Item>
 
@@ -175,9 +176,9 @@ export default function ProfilePage() {
                           rules={[{ required: true, message: 'Please enter your full name' }]}
                         >
                           <Input 
-                            prefix={<UserOutlined className="text-slate-300" />} 
+                            prefix={<UserOutlined className="text-text-secondary/50" />} 
                             placeholder="Your full name" 
-                            className="h-11 rounded-xl"
+                            className="h-11 rounded-xl bg-app-bg border-card-border text-text-primary"
                           />
                         </Form.Item>
 
@@ -190,19 +191,19 @@ export default function ProfilePage() {
                           ]}
                         >
                           <Input 
-                            prefix={<MailOutlined className="text-slate-300" />} 
+                            prefix={<MailOutlined className="text-text-secondary/50" />} 
                             placeholder="your.email@example.com" 
-                            className="h-11 rounded-xl"
+                            className="h-11 rounded-xl bg-app-bg border-card-border text-text-primary"
                           />
                         </Form.Item>
 
-                        <div className="mt-4 pt-4 border-t border-slate-50 flex justify-end">
+                        <div className="mt-8 pt-6 border-t border-card-border flex justify-end">
                           <Button 
                             type="primary" 
                             htmlType="submit" 
                             loading={submitting}
                             icon={<SaveOutlined />}
-                            className="h-11 px-8 rounded-xl font-bold shadow-lg shadow-blue-500/20"
+                            className="h-11 px-10 rounded-xl font-bold bg-primary border-none shadow-lg shadow-primary/20"
                           >
                             Save Changes
                           </Button>
@@ -214,18 +215,18 @@ export default function ProfilePage() {
                 {
                   key: 'security',
                   label: (
-                    <span className="flex items-center gap-2 px-2 py-1">
+                    <span className="flex items-center gap-2 px-6 py-4">
                       <LockOutlined /> Change Password
                     </span>
                   ),
                   children: (
-                    <div className="p-4">
+                    <div className="p-8">
                       <Alert
-                        message="Password Requirements"
-                        description="Ensure your new password is at least 8 characters long and includes numbers or special characters for better security."
+                        message={<span className="font-bold text-blue-900 dark:text-blue-200">Password Requirements</span>}
+                        description={<span className="text-blue-800 dark:text-blue-300">Ensure your new password is at least 8 characters long and includes numbers or special characters for better security.</span>}
                         type="info"
                         showIcon
-                        className="mb-6 rounded-xl border-blue-50 bg-blue-50/30"
+                        className="mb-8 rounded-xl border-blue-200 bg-blue-500/10"
                       />
 
                       <Form
@@ -240,13 +241,13 @@ export default function ProfilePage() {
                           rules={[{ required: true, message: 'Please enter current password' }]}
                         >
                           <Input.Password 
-                            prefix={<LockOutlined className="text-slate-300" />} 
+                            prefix={<LockOutlined className="text-text-secondary/50" />} 
                             placeholder="Confirm current password" 
-                            className="h-11 rounded-xl"
+                            className="h-11 rounded-xl bg-app-bg border-card-border text-text-primary"
                           />
                         </Form.Item>
 
-                        <Divider className="my-6" />
+                        <Divider className="border-card-border my-8" />
 
                         <Form.Item
                           label="New Password"
@@ -257,9 +258,9 @@ export default function ProfilePage() {
                           ]}
                         >
                           <Input.Password 
-                            prefix={<KeyOutlined className="text-slate-300" />} 
+                            prefix={<KeyOutlined className="text-text-secondary/50" />} 
                             placeholder="Enter new password" 
-                            className="h-11 rounded-xl"
+                            className="h-11 rounded-xl bg-app-bg border-card-border text-text-primary"
                           />
                         </Form.Item>
 
@@ -280,19 +281,19 @@ export default function ProfilePage() {
                           ]}
                         >
                           <Input.Password 
-                            prefix={<KeyOutlined className="text-slate-300" />} 
+                            prefix={<KeyOutlined className="text-text-secondary/50" />} 
                             placeholder="Confirm new password" 
-                            className="h-11 rounded-xl"
+                            className="h-11 rounded-xl bg-app-bg border-card-border text-text-primary"
                           />
                         </Form.Item>
 
-                        <div className="mt-4 pt-4 border-t border-slate-50 flex justify-end">
+                        <div className="mt-8 pt-6 border-t border-card-border flex justify-end">
                           <Button 
                             type="primary" 
                             htmlType="submit" 
                             loading={pwSubmitting}
                             icon={<LockOutlined />}
-                            className="h-11 px-8 rounded-xl font-bold shadow-lg shadow-blue-500/20"
+                            className="h-11 px-10 rounded-xl font-bold bg-primary border-none shadow-lg shadow-primary/20"
                           >
                             Update Password
                           </Button>

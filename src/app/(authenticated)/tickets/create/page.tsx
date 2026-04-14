@@ -131,32 +131,32 @@ export default function CreateTicketPage() {
   const steps = [
     {
       title: 'Identity',
-      icon: <IdcardOutlined />,
+      icon: <IdcardOutlined className="stepper-icon-style" />,
       content: (
         <div className="space-y-6 animate-in fade-in duration-500">
            <Row gutter={24}>
               <Col xs={24} md={16}>
                 <Form.Item
                   name="ticket_subject"
-                  label={<span className="font-bold text-slate-700">Issue Subject</span>}
+                  label={<span className="font-bold text-text-primary">Issue Subject</span>}
                   rules={[{ required: true, message: 'Please describe the subject' }]}
                 >
-                  <Input placeholder="What's the issue?" className="h-10 rounded-lg border-slate-200" />
+                  <Input placeholder="What's the issue?" className="h-10 rounded-lg border-card-border bg-app-bg text-text-primary" />
                 </Form.Item>
               </Col>
               <Col xs={24} md={8}>
                 <Form.Item
                   name="requestor_name"
-                  label={<span className="font-bold text-slate-700">Reporter</span>}
+                  label={<span className="font-bold text-text-primary">Reporter</span>}
                   rules={[{ required: true, message: 'Requester name required' }]}
                 >
-                  <Input placeholder="User name" className="h-10 rounded-lg border-slate-200" />
+                  <Input placeholder="User name" className="h-10 rounded-lg border-card-border bg-app-bg text-text-primary" />
                 </Form.Item>
               </Col>
            </Row>
            <Row gutter={24}>
               <Col xs={24} md={12}>
-                <Form.Item name="category_id" label={<span className="font-bold text-slate-700">Category</span>} rules={[{ required: true }]}>
+                <Form.Item name="category_id" label={<span className="font-bold text-text-primary">Category</span>} rules={[{ required: true }]}>
                   <Select placeholder="Select category" className="h-10 w-full custom-select">
                     {masterData.categories.map((c: any) => (
                       <Select.Option key={c.category_id} value={c.category_id}>
@@ -170,7 +170,7 @@ export default function CreateTicketPage() {
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>
-                <Form.Item name="division_id" label={<span className="font-bold text-slate-700">Division</span>} rules={[{ required: true }]}>
+                <Form.Item name="division_id" label={<span className="font-bold text-text-primary">Division</span>} rules={[{ required: true }]}>
                    <Select placeholder="Select department" className="h-10">
                       {masterData.divisions.map((d: any) => (
                         <Select.Option key={d.division_id} value={d.division_id}>{d.division_name}</Select.Option>
@@ -184,13 +184,13 @@ export default function CreateTicketPage() {
     },
     {
       title: 'Timeline',
-      icon: <CalendarOutlined />,
+      icon: <CalendarOutlined className="stepper-icon-style" />,
       content: (
         <div className="space-y-6 animate-in fade-in duration-500">
           <Row gutter={24}>
              <Col xs={24} md={8}>
-                <Form.Item name="ticket_type_id" label={<span className="font-bold text-slate-700">Type</span>} rules={[{ required: true }]}>
-                  <Select className="h-10">
+                <Form.Item name="ticket_type_id" label={<span className="font-bold text-text-primary">Type</span>} rules={[{ required: true }]}>
+                   <Select className="h-10">
                     {masterData.types.map((t: any) => (
                       <Select.Option key={t.ticket_type_id} value={t.ticket_type_id}>{t.ticket_type_name}</Select.Option>
                     ))}
@@ -198,8 +198,8 @@ export default function CreateTicketPage() {
                 </Form.Item>
              </Col>
              <Col xs={24} md={8}>
-                <Form.Item name="ticket_priority_id" label={<span className="font-bold text-slate-700">Priority</span>} rules={[{ required: true }]}>
-                  <Select className="h-10">
+                <Form.Item name="ticket_priority_id" label={<span className="font-bold text-text-primary">Priority</span>} rules={[{ required: true }]}>
+                   <Select className="h-10">
                      {masterData.priorities.map((p: any) => (
                        <Select.Option key={p.ticket_priority_id} value={p.ticket_priority_id}>
                          <Space>
@@ -208,11 +208,11 @@ export default function CreateTicketPage() {
                          </Space>
                        </Select.Option>
                      ))}
-                  </Select>
+                   </Select>
                 </Form.Item>
              </Col>
              <Col xs={24} md={8}>
-                <Form.Item name="ticket_status_id" label={<span className="font-bold text-slate-700">Initial Status</span>} rules={[{ required: true }]}>
+                <Form.Item name="ticket_status_id" label={<span className="font-bold text-text-primary">Initial Status</span>} rules={[{ required: true }]}>
                    <Select className="h-10">
                       {masterData.statuses.map((s: any) => (
                         <Select.Option key={s.ticket_status_id} value={s.ticket_status_id}>{s.ticket_name}</Select.Option>
@@ -221,15 +221,15 @@ export default function CreateTicketPage() {
                 </Form.Item>
              </Col>
           </Row>
-          <Row gutter={24}>
+           <Row gutter={24}>
              <Col xs={24} md={12}>
-                <Form.Item name="ticket_start_date" label={<span className="font-bold text-slate-700">Start Date</span>}>
-                  <DatePicker className="w-full h-10 rounded-lg" />
+                <Form.Item name="ticket_start_date" label={<span className="font-bold text-text-primary">Start Date</span>}>
+                  <DatePicker className="w-full h-10 rounded-lg border-card-border bg-app-bg text-text-primary" />
                 </Form.Item>
              </Col>
              <Col xs={24} md={12}>
-                <Form.Item name="ticket_end_date" label={<span className="font-bold text-slate-700">Finish Date</span>}>
-                  <DatePicker className="w-full h-10 rounded-lg" />
+                <Form.Item name="ticket_end_date" label={<span className="font-bold text-text-primary">Finish Date</span>}>
+                  <DatePicker className="w-full h-10 rounded-lg border-card-border bg-app-bg text-text-primary" />
                 </Form.Item>
              </Col>
           </Row>
@@ -238,25 +238,25 @@ export default function CreateTicketPage() {
     },
     {
       title: 'Details',
-      icon: <CloudUploadOutlined />,
+      icon: <CloudUploadOutlined className="stepper-icon-style" />,
       content: (
-        <div className="space-y-6 animate-in fade-in duration-500">
-           <Form.Item name="ticket_detail" label={<span className="font-bold text-slate-700">Detailed Description</span>} rules={[{ required: true }]}>
-              <TextArea rows={8} placeholder="Describe the problem in detail..." className="rounded-2xl p-4 text-base" />
+         <div className="space-y-6 animate-in fade-in duration-500">
+           <Form.Item name="ticket_detail" label={<span className="font-bold text-text-primary">Detailed Description</span>} rules={[{ required: true }]}>
+              <TextArea rows={8} placeholder="Describe the problem in detail..." className="rounded-2xl p-4 text-base bg-app-bg text-text-primary border-card-border" />
            </Form.Item>
            <Form.Item 
               name="attachments" 
-              label={<span className="font-bold text-slate-700">Evidence / Attachments</span>}
+              label={<span className="font-bold text-text-primary">Evidence / Attachments</span>}
               valuePropName="fileList"
               getValueFromEvent={(e: any) => {
                 if (Array.isArray(e)) return e;
                 return e?.fileList;
               }}
            >
-              <Upload.Dragger multiple beforeUpload={() => false} listType="picture" className="rounded-2xl bg-slate-50 border-dashed border-slate-200">
-                <p className="ant-upload-drag-icon pt-6"><PaperClipOutlined className="text-blue-500" /></p>
-                <p className="ant-upload-text font-bold">Files and Images</p>
-                <p className="ant-upload-hint pb-6 text-xs">Drag files here to upload (Max 10MB)</p>
+              <Upload.Dragger multiple beforeUpload={() => false} listType="picture" className="rounded-2xl bg-app-bg border-dashed border-card-border overflow-hidden">
+                <p className="ant-upload-drag-icon pt-6"><PaperClipOutlined className="text-primary" /></p>
+                <p className="ant-upload-text font-bold text-text-primary">Files and Images</p>
+                <p className="ant-upload-hint pb-6 text-xs text-text-secondary">Drag files here to upload (Max 10MB)</p>
               </Upload.Dragger>
            </Form.Item>
         </div>
@@ -266,24 +266,24 @@ export default function CreateTicketPage() {
 
   return (
     <App>
-      <div className="max-w-4xl mx-auto pb-10">
+      <div className="w-full pb-10 transition-colors">
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
          <Space direction="horizontal" size="middle">
-            <Button icon={<ArrowLeftOutlined />} onClick={() => router.push('/tickets')} className="rounded-full shadow-sm" />
+            <Button icon={<ArrowLeftOutlined />} onClick={() => router.push('/tickets')} className="rounded-full shadow-sm bg-card-bg border-card-border text-text-secondary hover:text-primary" />
             <div>
-               <Title level={4} className="m-0">Ticket Registration</Title>
-               <Text type="secondary" className="text-xs">Follow the steps to submit your request</Text>
+               <Title level={4} className="m-0 text-text-primary">Ticket Registration</Title>
+               <Text className="text-text-secondary text-xs">Follow the steps to submit your request</Text>
             </div>
          </Space>
-         <div className="px-6 py-2 text-white">
-            <Title level={4} className="m-0 font-mono font-bold leading-none">{ticketNumber}</Title>
+         <div className="px-6 py-2 text-text-primary">
+            <Title level={2} className="m-0 font-mono font-bold leading-none text-text-primary">{ticketNumber}</Title>
          </div>
       </div>
 
-      <Card className="rounded-3xl shadow-xl border-slate-100 overflow-hidden p-0" styles={{ body: { padding: 0 } }}>
+      <Card className="rounded-3xl shadow-xl border-card-border overflow-hidden p-0 bg-card-bg" styles={{ body: { padding: 0 } }}>
          {/* Stepper Header */}
-         <div className="bg-slate-50 border-b border-slate-100 p-8">
+         <div className="bg-app-bg/30 border-b border-card-border p-8">
             <Steps 
                current={current} 
                className="custom-stepper"
@@ -311,14 +311,14 @@ export default function CreateTicketPage() {
                      {steps[2].content}
                    </div>
                    
-                   <Divider className="my-10 border-slate-50" />
+                   <Divider className="my-10 border-card-border" />
 
                    <div className="flex items-center justify-between">
                       {current > 0 ? (
                         <Button 
                           icon={<LeftOutlined />} 
                           onClick={prev} 
-                          className="h-10 px-8 rounded-lg font-bold border-slate-200 text-slate-400 hover:text-slate-600"
+                          className="h-10 px-8 rounded-lg font-bold border-card-border text-text-secondary hover:text-text-primary bg-transparent"
                         >
                           Back
                         </Button>
@@ -327,7 +327,7 @@ export default function CreateTicketPage() {
                       <Space size="middle">
                         <Button 
                           onClick={() => router.push('/tickets')} 
-                          className="h-10 px-6 border-none text-slate-400 hover:text-slate-600"
+                          className="h-10 px-6 border-none text-text-secondary hover:text-text-primary bg-transparent"
                         >
                           Discard
                         </Button>
@@ -335,7 +335,7 @@ export default function CreateTicketPage() {
                           <Button 
                             type="primary" 
                             onClick={next} 
-                            className="h-10 px-12 rounded-lg font-bold bg-blue-600 shadow-xl shadow-blue-500/20 flex items-center"
+                            className="h-10 px-12 rounded-lg font-bold bg-primary shadow-xl shadow-primary/20 flex items-center"
                           >
                             Next <DoubleRightOutlined className="text-[10px]" />
                           </Button>
@@ -344,7 +344,7 @@ export default function CreateTicketPage() {
                             type="primary" 
                             htmlType="submit" 
                             loading={loading}
-                            className="h-10 px-16 rounded-lg font-extrabold bg-blue-600 shadow-xl shadow-blue-500/30"
+                            className="h-10 px-16 rounded-lg font-extrabold bg-primary shadow-xl shadow-primary/30 border-none"
                           >
                             Submit Ticket
                           </Button>
@@ -358,30 +358,56 @@ export default function CreateTicketPage() {
       </Card>
 
       <style jsx global>{`
-        .custom-stepper .ant-steps-item-process .ant-steps-item-icon {
-          background-color: #2563eb !important;
-          border-color: #2563eb !important;
-          box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
-        }
-        .custom-stepper .ant-steps-item-wait .ant-steps-item-icon {
-          background-color: #f8fafc !important;
-          border-color: #e2e8f0 !important;
-        }
         .custom-stepper .ant-steps-item-icon {
           display: flex;
           align-items: center;
           justify-content: center;
+          width: 40px !important;
+          height: 40px !important;
+          line-height: 40px !important;
+          font-size: 18px !important;
           transition: all 0.3s ease;
         }
-        .ant-steps-item-finish .ant-steps-item-icon {
-          border-color: #2563eb !important;
-          background-color: #eff6ff !important;
-        }
-        .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
-          color: #2563eb !important;
+         /* Definitive icon visibility override */
+         .custom-stepper .ant-steps-item-process .ant-steps-item-icon, 
+         .custom-stepper .ant-steps-item-finish .ant-steps-item-icon {
+           background-color: var(--primary) !important;
+           border-color: var(--primary) !important;
+           box-shadow: 0 0 15px rgba(22, 119, 255, 0.4);
+         }
+         
+         .custom-stepper .stepper-icon-style,
+         .custom-stepper .ant-steps-icon svg,
+         .custom-stepper .ant-steps-icon svg path,
+         .custom-stepper .ant-steps-icon svg rect,
+         .custom-stepper .ant-steps-icon svg circle {
+           color: #ffffff !important;
+           fill: #ffffff !important;
+           stroke: #ffffff !important;
+           opacity: 1 !important;
+           visibility: visible !important;
+         }
+
+         .custom-stepper .ant-steps-item-wait .ant-steps-item-icon {
+           background-color: var(--app-bg) !important;
+           border-color: var(--card-border) !important;
+         }
+         
+         .custom-stepper .ant-steps-item-wait .stepper-icon-style,
+         .custom-stepper .ant-steps-item-wait .ant-steps-icon svg {
+           color: var(--text-secondary) !important;
+           fill: var(--text-secondary) !important;
+           opacity: 0.5;
+         }
+        .ant-steps-item-finish .ant-steps-item-title {
+          color: var(--text-primary) !important;
         }
         .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
-          background-color: #2563eb !important;
+          background-color: var(--primary) !important;
+        }
+        .ant-steps-item-process .ant-steps-item-title {
+          color: var(--text-primary) !important;
+          font-weight: 700 !important;
         }
         .animate-in {
           animation: fadeIn 0.4s ease-out;

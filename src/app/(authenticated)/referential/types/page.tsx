@@ -65,12 +65,12 @@ export default function TypesPage() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-card-bg rounded-2xl shadow-sm border border-card-border overflow-hidden transition-colors">
       {/* Module Header */}
-      <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50/30">
+      <div className="p-6 border-b border-card-border flex flex-col md:flex-row md:items-center justify-between gap-4 bg-app-bg/10">
         <div>
-          <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-slate-800">Support Request Types</Title>
-          <Text className="text-slate-500 text-sm">Classify requests into Requests, Incidents, or internal tasks.</Text>
+          <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-text-primary">Support Request Types</Title>
+          <Text className="text-text-secondary text-sm">Classify requests into Requests, Incidents, or internal tasks.</Text>
         </div>
         <Button 
           type="primary" 
@@ -94,7 +94,7 @@ export default function TypesPage() {
             defaultPageSize: 10, 
             showSizeChanger: true, 
             pageSizeOptions: ['10', '20', '50'],
-            showTotal: (total) => <span className="text-slate-500 text-xs font-medium">Total {total} types found</span>,
+            showTotal: (total) => <span className="text-text-secondary text-xs font-medium">Total {total} types found</span>,
             className: "px-6 pb-6",
           }}
         />

@@ -65,12 +65,12 @@ export default function DivisionsPage() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-card-bg rounded-2xl shadow-sm border border-card-border overflow-hidden transition-colors">
       {/* Module Header */}
-      <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50/30">
+      <div className="p-6 border-b border-card-border flex flex-col md:flex-row md:items-center justify-between gap-4 bg-app-bg/10">
         <div>
-          <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-slate-800">Company Divisions</Title>
-          <Text className="text-slate-500 text-sm">Manage internal organizational units and company branches.</Text>
+          <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-text-primary">Company Divisions</Title>
+          <Text className="text-text-secondary text-sm">Manage internal organizational units and company branches.</Text>
         </div>
         <Button 
           type="primary" 
@@ -94,7 +94,7 @@ export default function DivisionsPage() {
             defaultPageSize: 10, 
             showSizeChanger: true, 
             pageSizeOptions: ['10', '20', '50'],
-            showTotal: (total) => <span className="text-slate-500 text-xs font-medium">Total {total} divisions</span>,
+            showTotal: (total) => <span className="text-text-secondary text-xs font-medium">Total {total} divisions</span>,
             className: "px-6 pb-6",
           }}
         />

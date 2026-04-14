@@ -67,12 +67,12 @@ export default function StatusesPage() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-card-bg rounded-2xl shadow-sm border border-card-border overflow-hidden transition-colors">
       {/* Module Header Container */}
-      <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50/30">
+      <div className="p-6 border-b border-card-border flex flex-col md:flex-row md:items-center justify-between gap-4 bg-app-bg/10">
         <div>
-          <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-slate-800">Ticket Statuses</Title>
-          <Text className="text-slate-500 text-sm">Monitor lifecycle stages of support tickets from Open to Resolved.</Text>
+          <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-text-primary">Ticket Statuses</Title>
+          <Text className="text-text-secondary text-sm">Monitor lifecycle stages of support tickets from Open to Resolved.</Text>
         </div>
         <Button 
           type="primary" 
@@ -96,7 +96,7 @@ export default function StatusesPage() {
             defaultPageSize: 10, 
             showSizeChanger: true, 
             pageSizeOptions: ['10', '20', '50'],
-            showTotal: (total) => <span className="text-slate-500 text-xs font-medium">Total {total} statuses defined</span>,
+            showTotal: (total) => <span className="text-text-secondary text-xs font-medium">Total {total} statuses defined</span>,
             className: "px-6 pb-6",
           }}
         />

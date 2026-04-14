@@ -35,15 +35,15 @@ export default function CreateStatusPage() {
                 type="text" 
                 icon={<ArrowLeftOutlined />} 
                 onClick={() => router.back()} 
-                className="hover:bg-slate-100 rounded-full"
+                className="hover:bg-card-border/50 rounded-full"
             />
-            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>Add New Status</Title>
+            <Title level={4} style={{ margin: 0, fontWeight: 700 }} className="text-text-primary">Add New Status</Title>
           </div>
-          <Text className="text-slate-500 ml-10">Define a new lifecycle stage for support tickets.</Text>
+          <Text type="secondary" className="ml-10">Define a new lifecycle stage for support tickets.</Text>
         </Space>
       </div>
 
-      <Card className="shadow-sm border-slate-100 rounded-2xl overflow-hidden p-4">
+      <Card className="shadow-sm border-card-border rounded-2xl overflow-hidden p-4 bg-card-bg">
         <Form
           form={form}
           layout="vertical"
@@ -54,36 +54,36 @@ export default function CreateStatusPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2">
             <Form.Item
               name="ticket_name"
-              label={<span className="font-semibold text-slate-700">Status Name</span>}
+              label="Status Name"
               rules={[{ required: true, message: 'Please enter status name' }]}
             >
-              <Input placeholder="e.g. Open, In Progress, Resolved" className="h-10 rounded-lg text-base" />
+              <Input placeholder="e.g. Open, In Progress, Resolved" className="h-10 rounded-lg text-base bg-app-bg border-card-border text-text-primary" />
             </Form.Item>
 
             <Form.Item
               name="color"
-              label={<span className="font-semibold text-slate-700">Label Color</span>}
+              label="Label Color"
               rules={[{ required: true }]}
-              extra={<Text className="text-slate-400 italic text-xs">Used for status badges</Text>}
+              extra={<Text type="secondary" italic className="text-xs">Used for status badges</Text>}
             >
-              <Input type="color" className="w-16 h-10 p-1 rounded-lg border-slate-200" />
+              <Input type="color" className="w-16 h-10 p-1 rounded-lg border-card-border bg-app-bg" />
             </Form.Item>
           </div>
 
           <div className="p-2">
             <Form.Item
               name="is_default"
-              label={<span className="font-semibold text-slate-700">Set as System Default?</span>}
+              label="Set as System Default?"
               valuePropName="checked"
             >
               <Switch checkedChildren="Yes" unCheckedChildren="No" />
             </Form.Item>
           </div>
 
-          <div className="border-t border-slate-50 mt-8 pt-6 flex justify-end gap-3 px-2">
+          <div className="border-t border-card-border mt-8 pt-6 flex justify-end gap-3 px-2">
             <Button 
               onClick={() => router.back()} 
-              className="h-10 px-6 rounded-lg font-medium"
+              className="h-10 px-6 rounded-lg font-medium border-card-border text-text-secondary hover:text-text-primary bg-card-bg transition-all"
             >
               Discard
             </Button>
@@ -92,7 +92,7 @@ export default function CreateStatusPage() {
               htmlType="submit" 
               loading={loading} 
               icon={<SaveOutlined />}
-              className="h-10 px-8 rounded-lg font-semibold shadow-md shadow-blue-500/20"
+              className="h-10 px-8 rounded-lg font-semibold shadow-md shadow-primary/20 bg-primary border-none"
             >
               Save Status
             </Button>

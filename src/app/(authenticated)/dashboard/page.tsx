@@ -9,6 +9,7 @@ import {
   AppstoreOutlined, FireOutlined, TeamOutlined, ArrowRightOutlined, ArrowUpOutlined
 } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import { getDashboardData } from '@/app/actions/tickets';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as ReTooltip, ResponsiveContainer,
@@ -23,7 +24,7 @@ function StatMiniCard({ title, value, color, icon, loading }: any) {
   
   return (
     <div 
-      className="flex-1 min-w-[160px] bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-all group"
+      className="flex-1 min-w-[160px] bg-card-bg rounded-2xl p-5 border border-card-border shadow-sm hover:shadow-md transition-all group"
     >
       <div className="flex items-center gap-4">
         <div 
@@ -33,10 +34,10 @@ function StatMiniCard({ title, value, color, icon, loading }: any) {
           {icon}
         </div>
         <div className="flex-1 min-w-0">
-          <Text className="text-slate-500 text-[10px] font-bold block leading-none mb-1.5 truncate">
+          <Text className="text-text-secondary text-[10px] font-bold block leading-none mb-1.5 truncate">
             {title}
           </Text>
-          <div className="text-2xl font-black text-slate-800 leading-none">
+          <div className="text-2xl font-black text-text-primary leading-none">
             {value}
           </div>
         </div>
@@ -58,14 +59,15 @@ const getStatusIcon = (name: string) => {
 const CustomAreaTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-slate-100 px-4 py-3">
-      <p className="text-slate-400 text-xs font-medium mb-1">{label}</p>
+    <div className="bg-card-bg rounded-2xl shadow-xl border border-card-border px-4 py-3">
+      <p className="text-text-secondary text-xs font-medium mb-1">{label}</p>
       <p className="text-blue-600 font-bold text-base">{payload[0].value} tickets</p>
     </div>
   );
 };
 
 export default function DashboardPage() {
+  const { resolvedTheme } = useTheme();
   const router = useRouter();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -103,7 +105,7 @@ export default function DashboardPage() {
       {/* ── Page Header ── */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <Title level={3} style={{ margin: 0 }} className="text-slate-900 font-black tracking-tight">
+          <Title level={3} style={{ margin: 0 }} className="text-text-primary font-black tracking-tight">
             Dashboard Overview
           </Title>
           <Text type="secondary" className="text-sm">
@@ -197,9 +199,9 @@ export default function DashboardPage() {
                       <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                  <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} allowDecimals={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={resolvedTheme === 'dark' ? '#1e293b' : '#f1f5f9'} vertical={false} />
+                  <XAxis dataKey="date" tick={{ fontSize: 11, fill: resolvedTheme === 'dark' ? '#64748b' : '#94a3b8' }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 11, fill: resolvedTheme === 'dark' ? '#64748b' : '#94a3b8' }} axisLine={false} tickLine={false} allowDecimals={false} />
                   <ReTooltip content={<CustomAreaTooltip />} />
                   <Area
                     type="monotone"
@@ -258,10 +260,10 @@ export default function DashboardPage() {
                   return (
                     <div key={i}>
                       <div className="flex items-center justify-between mb-1.5">
-                        <Text className="text-slate-600 text-[13px] font-medium truncate">{d.name}</Text>
-                        <Text strong className="text-slate-800 text-[13px]">{d.count}</Text>
+                        <Text className="text-text-secondary text-[13px] font-medium truncate">{d.name}</Text>
+                        <Text strong className="text-text-primary text-[13px]">{d.count}</Text>
                       </div>
-                      <div className="h-1.5 bg-slate-50 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-app-bg rounded-full overflow-hidden">
                         <div className="h-full bg-blue-500 rounded-full transition-all duration-700" style={{ width: `${(d.count / max) * 100}%` }} />
                       </div>
                     </div>
@@ -298,19 +300,19 @@ export default function DashboardPage() {
         extra={<Button type="link" icon={<ArrowRightOutlined />} onClick={() => router.push('/tickets')}>View All</Button>}
       >
         {loading ? <Skeleton active /> : (
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-card-border">
             {data?.recentTickets?.map((t: any) => (
-              <div 
+                <div 
                 key={t.ticket_id} 
-                className="flex items-center gap-4 py-4 hover:bg-slate-50/50 transition-colors cursor-pointer group px-2 rounded-xl"
+                className="flex items-center gap-4 py-4 hover:bg-app-bg/50 transition-colors cursor-pointer group px-2 rounded-xl"
                 onClick={() => router.push(`/tickets/${t.ticket_id}`)}
               >
                 <div className="w-9 h-9 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-xs uppercase">
                   {t.requestor_name?.charAt(0)}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <Text strong className="block text-sm truncate group-hover:text-blue-600 transition-colors">{t.ticket_subject}</Text>
-                  <Text type="secondary" className="text-[11px] font-mono">{t.ticket_number} • {t.requestor_name}</Text>
+                  <Text strong className="block text-sm truncate group-hover:text-blue-600 transition-colors text-text-primary">{t.ticket_subject}</Text>
+                  <Text className="text-[11px] font-mono text-text-secondary">{t.ticket_number} • {t.requestor_name}</Text>
                 </div>
                 <div className="flex items-center gap-3">
                   <span 
@@ -333,17 +335,17 @@ export default function DashboardPage() {
 // ── Shared Card Wrapper ─────────────────────────────────────────────────────
 function CardWithTitle({ title, subtitle, icon, extra, children }: any) {
   return (
-    <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+    <div className="bg-card-bg rounded-3xl border border-card-border shadow-sm p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-base">
+          <div className="w-8 h-8 rounded-lg bg-app-bg flex items-center justify-center text-base">
             {icon}
           </div>
           <div>
-            <Title level={5} style={{ margin: 0 }} className="text-slate-800 text-sm font-bold uppercase tracking-widest leading-none">
+            <Title level={5} style={{ margin: 0 }} className="text-text-primary text-sm font-bold uppercase tracking-widest leading-none">
               {title}
             </Title>
-            {subtitle && <Text type="secondary" className="text-[11px] mt-1 block">{subtitle}</Text>}
+            {subtitle && <Text className="text-text-secondary text-[11px] mt-1 block">{subtitle}</Text>}
           </div>
         </div>
         {extra}
