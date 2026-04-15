@@ -81,8 +81,10 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-6xl">
-        <Skeleton active avatar paragraph={{ rows: 10 }} />
+      <div className="mx-auto max-w-6xl p-10">
+        <Form form={form} component={false} />
+        <Form form={pwForm} component={false} />
+        <Skeleton active avatar paragraph={{ rows: 12 }} />
       </div>
     );
   }

@@ -113,7 +113,6 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
       await saveTicketReply({
         ...values,
         ticket_id: id,
-        pic_user_id: 1, // Hardware pic_user_id mapping for active session
         files: processedFiles
       });
       message.success('Reply posted successfully');

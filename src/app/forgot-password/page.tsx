@@ -54,13 +54,13 @@ export default function ForgotPasswordPage() {
         <div className={`p-8 md:p-12 rounded-[48px] shadow-2xl border transition-all duration-300 ${isDark ? 'bg-[#18181b] border-zinc-800 shadow-black/50' : 'bg-white border-zinc-100 shadow-zinc-200/50'}`}>
           
           <div className="text-center mb-10 pt-4">
-            <div className={`inline-flex items-center justify-center w-20 h-20 rounded-[28px] mb-8 shadow-xl border p-3 ${isDark ? 'bg-primary border-none shadow-primary/20' : 'bg-white border-2 border-zinc-100 shadow-zinc-200/20'}`}>
+            <div className={`inline-flex items-center justify-center w-20 h-20 mb-8 transform hover:rotate-2 transition-transform`}>
                 <img 
                   src={isDark ? "/logoapp.jpg" : "/logoapplight.jpg"} 
-                  alt="App Logo" 
-                  className="w-16 h-16 object-contain"
+                  alt="Tea on Tech Logo" 
+                  className="object-contain rounded-[10px]"
                 />
-            </div>
+             </div>
             
             <Title level={1} style={{ margin: 0, fontSize: '30px', fontWeight: 900, letterSpacing: '-0.5px' }} className={isDark ? 'text-zinc-50' : 'text-zinc-900'}>
               Recovery

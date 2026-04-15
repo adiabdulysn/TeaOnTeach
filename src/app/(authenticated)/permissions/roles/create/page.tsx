@@ -8,14 +8,15 @@ import { useRouter } from 'next/navigation';
 const { Title, Text } = Typography;
 
 const PERMISSION_MODULES = [
-  { title: 'Ticket', key: 'tickets', actions: ['view_tickets', 'create_tickets', 'edit_tickets', 'delete_tickets', 'manage_own_tickets'] },
+  { title: 'Dashboard', key: 'dashboard', actions: ['view_dashboard', 'view_analytics'] },
+  { title: 'Ticket', key: 'tickets', actions: ['view_tickets', 'create_tickets', 'edit_tickets', 'delete_tickets', 'reply_tickets', 'close_tickets', 'manage_own_tickets'] },
   { title: 'Category', key: 'categories', actions: ['view_categories', 'create_categories', 'edit_categories', 'delete_categories'] },
   { title: 'Division', key: 'divisions', actions: ['view_divisions', 'create_divisions', 'edit_divisions', 'delete_divisions'] },
   { title: 'Priority', key: 'priorities', actions: ['view_priorities', 'create_priorities', 'edit_priorities', 'delete_priorities'] },
   { title: 'Status', key: 'statuses', actions: ['view_statuses', 'create_statuses', 'edit_statuses', 'delete_statuses'] },
   { title: 'Ticket Type', key: 'types', actions: ['view_types', 'create_types', 'edit_types', 'delete_types'] },
-  { title: 'User', key: 'users', actions: ['view_users', 'create_users', 'edit_users', 'delete_users'] },
-  { title: 'Role', key: 'roles', actions: ['view_roles', 'create_roles', 'edit_roles', 'delete_roles'] }
+  { title: 'User Account', key: 'users', actions: ['view_users', 'create_users', 'edit_users', 'delete_users'] },
+  { title: 'Role & Permission', key: 'roles', actions: ['view_roles', 'create_roles', 'edit_roles', 'delete_roles'] }
 ];
 const ALL_PERMISSIONS = PERMISSION_MODULES.flatMap(m => m.actions);
 

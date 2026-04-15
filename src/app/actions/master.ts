@@ -2,6 +2,15 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { getSession } from '@/lib/auth';
+
+async function requireAdmin() {
+  const session = await getSession();
+  if (!session || session.role_id !== 1) {
+    throw new Error('Unauthorized: Administrator access required.');
+  }
+  return session;
+}
 
 // --- Categories ---
 export async function getCategories() {
@@ -9,6 +18,7 @@ export async function getCategories() {
 }
 
 export async function saveCategory(data: any) {
+  await requireAdmin();
   const { category_id, category_name, color, icon } = data;
   
   if (category_id) {
@@ -28,6 +38,7 @@ export async function saveCategory(data: any) {
 }
 
 export async function deleteCategory(id: number) {
+  await requireAdmin();
   await prisma.categories.delete({ where: { category_id: id } });
   revalidatePath('/dashboard/master/categories');
 }
@@ -43,6 +54,7 @@ export async function getDivisions() {
 }
 
 export async function saveDivision(data: any) {
+  await requireAdmin();
   if (data.division_id) {
     await prisma.divisions.update({ where: { division_id: data.division_id }, data: { ...data, updated_at: new Date() } });
   } else {
@@ -52,6 +64,7 @@ export async function saveDivision(data: any) {
 }
 
 export async function deleteDivision(id: number) {
+  await requireAdmin();
   await prisma.divisions.delete({ where: { division_id: id } });
   revalidatePath('/dashboard/master/divisions');
 }
@@ -66,6 +79,7 @@ export async function getPriorities() {
 }
 
 export async function savePriority(data: any) {
+  await requireAdmin();
   const { ticket_priority_id, ticket_priority_name, color, icon, is_default } = data;
   const isDefault = is_default ? 1 : 0;
 
@@ -85,6 +99,7 @@ export async function savePriority(data: any) {
 }
 
 export async function deletePriority(id: number) {
+  await requireAdmin();
   await prisma.ticket_priorities.delete({ where: { ticket_priority_id: id } });
   revalidatePath('/dashboard/master/priorities');
 }
@@ -105,6 +120,7 @@ export async function getStatuses() {
 }
 
 export async function saveStatus(data: any) {
+  await requireAdmin();
   if (data.ticket_status_id) {
     await prisma.ticket_statuses.update({ where: { ticket_status_id: data.ticket_status_id }, data: { ...data, updated_at: new Date() } });
   } else {
@@ -114,6 +130,7 @@ export async function saveStatus(data: any) {
 }
 
 export async function deleteStatus(id: number) {
+  await requireAdmin();
   await prisma.ticket_statuses.delete({ where: { ticket_status_id: id } });
   revalidatePath('/dashboard/master/statuses');
 }
@@ -128,6 +145,7 @@ export async function getTypes() {
 }
 
 export async function saveType(data: any) {
+  await requireAdmin();
   if (data.ticket_type_id) {
     await prisma.ticket_types.update({ where: { ticket_type_id: data.ticket_type_id }, data: { ...data, updated_at: new Date() } });
   } else {
@@ -137,6 +155,7 @@ export async function saveType(data: any) {
 }
 
 export async function deleteType(id: number) {
+  await requireAdmin();
   await prisma.ticket_types.delete({ where: { ticket_type_id: id } });
   revalidatePath('/dashboard/master/types');
 }
@@ -182,6 +201,7 @@ export async function getUserById(id: string) {
 }
 
 export async function saveUser(data: any) {
+  await requireAdmin();
   const { user_id, user_name, full_name, email, password, role_id, is_active } = data;
   
   const userData: any = {
@@ -219,6 +239,7 @@ export async function saveUser(data: any) {
 }
 
 export async function deleteUser(id: string) {
+  await requireAdmin();
   await prisma.users.delete({
     where: { user_id: BigInt(id) }
   });

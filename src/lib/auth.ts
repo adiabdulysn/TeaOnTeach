@@ -25,10 +25,23 @@ export async function login_session(user: any, remember: boolean = false) {
   // Create the session
   const duration = remember ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000;
   const expires = new Date(Date.now() + duration);
+  
+  // Parse permissions carefully
+  let permissionsArr = [];
+  try {
+    permissionsArr = JSON.parse(user.permissions || '[]');
+  } catch (e) {
+    // Fallback for comma separated string
+    permissionsArr = user.permissions 
+      ? user.permissions.split(',').map((p: string) => p.trim()) 
+      : [];
+  }
+
   const session = await encrypt({ 
     user_id: user.user_id.toString(), 
     user_name: user.user_name,
     role_id: user.role_id,
+    permissions: permissionsArr,
     expires 
   });
 

@@ -2,6 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { getSession } from '@/lib/auth';
 import fs from 'fs';
 import path from 'path';
 
@@ -47,6 +48,12 @@ export async function getTicketFormData() {
 
 // --- Ticket Operations ---
 export async function getTickets() {
+  const session = await getSession();
+  if (!session) return [];
+
+  const isAdmin = session.role_id === 1;
+  const userId = session.user_id;
+
   // Using Raw SQL with JOINs to avoid Prisma Client synchronization issues 
   const result: any[] = await prisma.$queryRawUnsafe(`
     SELECT 
@@ -71,11 +78,11 @@ export async function getTickets() {
     LEFT JOIN divisions d ON t.division_id = d.division_id
     LEFT JOIN users u ON t.created_user_id = u.user_id
     LEFT JOIN users uu ON t.updated_user_id = uu.user_id
+    WHERE t.deleted_at IS NULL
+    ${isAdmin ? '' : `AND t.created_user_id = ${userId}`}
     ORDER BY t.created_at DESC
   `);
 
-  // Transform raw results to match the expected nested structure in the UI if possible,
-  // or update the UI to use the flat result. For simplicity and stability, I'll flatten.
   return result;
 }
 
@@ -95,6 +102,10 @@ export async function saveTicket(data: any) {
     files = [] // Array of { name, type, size, base64 } or similar
   } = data;
 
+  const session = await getSession();
+  if (!session) throw new Error('Unauthorized');
+  const userId = session.user_id;
+
   const ticket_number = await generateTicketNumber();
 
   // 1. Insert Ticket
@@ -107,7 +118,7 @@ export async function saveTicket(data: any) {
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?, ?, ?)`,
     ticket_number, ticket_subject, ticket_detail || null, requestor_name,
     Number(ticket_type_id), Number(category_id), Number(division_id), 
-    Number(ticket_priority_id), Number(ticket_status_id), BigInt(created_user_id),
+    Number(ticket_priority_id), Number(ticket_status_id), BigInt(userId),
     files.length > 0 ? 'Y' : 'N',
     ticket_start_date ? new Date(ticket_start_date) : null,
     ticket_end_date ? new Date(ticket_end_date) : null
@@ -148,8 +159,18 @@ export async function saveTicket(data: any) {
 }
 
 export async function getTicketSummary() {
+    const session = await getSession();
+    if (!session) return { total: 0, statuses: [] };
+
+    const isAdmin = session.role_id === 1;
+    const userId = session.user_id;
+
     // 1. Get total tickets
-    const totalResult: any[] = await prisma.$queryRawUnsafe(`SELECT COUNT(*) as count FROM tickets`);
+    const totalResult: any[] = await prisma.$queryRawUnsafe(`
+        SELECT COUNT(*) as count FROM tickets 
+        WHERE deleted_at IS NULL
+        ${isAdmin ? '' : `AND created_user_id = ${userId}`}
+    `);
     const total = Number(totalResult[0]?.count || 0);
 
     // 2. Get counts grouped by status (including statuses with 0 tickets)
@@ -160,7 +181,11 @@ export async function getTicketSummary() {
             ts.color,
             COUNT(t.ticket_id) as count
         FROM ticket_statuses ts
-        LEFT JOIN tickets t ON ts.ticket_status_id = t.ticket_status_id
+        LEFT JOIN (
+            SELECT * FROM tickets 
+            WHERE deleted_at IS NULL 
+            ${isAdmin ? '' : `AND created_user_id = ${userId}`}
+        ) t ON ts.ticket_status_id = t.ticket_status_id
         GROUP BY ts.ticket_status_id, ts.ticket_name, ts.color
         ORDER BY ts.ticket_status_id ASC
     `);
@@ -179,13 +204,22 @@ export async function getTicketSummary() {
 }
 
 export async function getDashboardData(month?: number, year?: number) {
-    const hasFilter = !!month && !!year;
+    const session = await getSession();
+    if (!session) throw new Error('Unauthorized');
 
-    // A sub-select that returns ticket_ids matching the date filter.
-    // Used in LEFT JOINs so we still show all rows from the left table.
-    const filteredTickets = hasFilter
-        ? `(SELECT * FROM tickets WHERE YEAR(created_at) = ${year} AND MONTH(created_at) = ${month})`
-        : `tickets`;
+    const isAdmin = session.role_id === 1;
+    const userId = session.user_id;
+
+    const hasFilter = !!month && !!year;
+    // CRITICAL: Must use ALIAS 't.' here because this string is used inside a sub-select that is JOINED with other tables
+    const baseFilter = `t.deleted_at IS NULL ${isAdmin ? '' : `AND t.created_user_id = ${userId}`}`;
+
+    // A sub-select that returns ticket_ids matching the date filter and isolation filter.
+    const filteredTickets = `(
+        SELECT * FROM tickets t
+        WHERE ${baseFilter} 
+        ${hasFilter ? `AND YEAR(t.created_at) = ${year} AND MONTH(t.created_at) = ${month}` : ''}
+    )`;
 
     const [
         totalResult,
@@ -198,9 +232,10 @@ export async function getDashboardData(month?: number, year?: number) {
     ] = await Promise.all([
         // Total count for the period
         prisma.$queryRawUnsafe(`
-            SELECT COUNT(*) as count FROM tickets
-            WHERE 1=1
-            ${hasFilter ? `AND YEAR(created_at) = ${year} AND MONTH(created_at) = ${month}` : ''}
+            SELECT COUNT(*) as count FROM tickets t
+            WHERE t.deleted_at IS NULL
+            ${isAdmin ? '' : `AND t.created_user_id = ${userId}`}
+            ${hasFilter ? `AND YEAR(t.created_at) = ${year} AND MONTH(t.created_at) = ${month}` : ''}
         `),
 
         // By status — LEFT JOIN with filtered set so statuses with 0 tickets still appear
@@ -242,21 +277,17 @@ export async function getDashboardData(month?: number, year?: number) {
         `),
 
         // Daily trend
-        hasFilter
-            ? prisma.$queryRawUnsafe(`
-                SELECT DATE(created_at) as date, COUNT(*) as count
-                FROM tickets
-                WHERE YEAR(created_at) = ${year} AND MONTH(created_at) = ${month}
-                GROUP BY DATE(created_at)
-                ORDER BY date ASC
-            `)
-            : prisma.$queryRawUnsafe(`
-                SELECT DATE(created_at) as date, COUNT(*) as count
-                FROM tickets
-                WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 13 DAY)
-                GROUP BY DATE(created_at)
-                ORDER BY date ASC
-            `),
+        prisma.$queryRawUnsafe(`
+            SELECT DATE(t.created_at) as date, COUNT(*) as count
+            FROM tickets t
+            WHERE t.deleted_at IS NULL
+            ${isAdmin ? '' : `AND t.created_user_id = ${userId}`}
+            ${hasFilter 
+                ? `AND YEAR(t.created_at) = ${year} AND MONTH(t.created_at) = ${month}` 
+                : 'AND t.created_at >= DATE_SUB(CURDATE(), INTERVAL 13 DAY)'}
+            GROUP BY DATE(t.created_at)
+            ORDER BY date ASC
+        `),
 
         // 5 most recent tickets
         prisma.$queryRawUnsafe(`
@@ -267,7 +298,7 @@ export async function getDashboardData(month?: number, year?: number) {
             FROM tickets t
             LEFT JOIN ticket_statuses ts ON t.ticket_status_id = ts.ticket_status_id
             LEFT JOIN ticket_priorities tp ON t.ticket_priority_id = tp.ticket_priority_id
-            WHERE 1=1
+            WHERE ${baseFilter}
             ${hasFilter ? `AND YEAR(t.created_at) = ${year} AND MONTH(t.created_at) = ${month}` : ''}
             ORDER BY t.created_at DESC
             LIMIT 5
@@ -387,14 +418,18 @@ export async function getTicketDetail(id: string) {
 }
 
 export async function saveTicketReply(data: any) {
-    const { ticket_id, ticket_status_id, pic_user_id, reply_description, files = [] } = data;
+    const { ticket_id, ticket_status_id, reply_description, files = [] } = data;
+
+    const session = await getSession();
+    if (!session) throw new Error('Unauthorized');
+    const userId = session.user_id;
 
     // 1. Insert Reply
     await prisma.$executeRawUnsafe(
         `INSERT INTO ticket_replys (
             ticket_id, ticket_status_id, pic_user_id, reply_description, created_at, ticket_attch
         ) VALUES (?, ?, ?, ?, NOW(), ?)`,
-        BigInt(ticket_id), Number(ticket_status_id), BigInt(pic_user_id), reply_description,
+        BigInt(ticket_id), Number(ticket_status_id), BigInt(userId), reply_description,
         files.length > 0 ? 'Y' : 'N'
     );
 
@@ -437,12 +472,47 @@ export async function saveTicketReply(data: any) {
 }
 
 export async function deleteTicket(id: string) {
-    await prisma.$executeRawUnsafe(`DELETE FROM tickets WHERE ticket_id = ?`, BigInt(id));
+    const session = await getSession();
+    if (!session) throw new Error('Unauthorized');
+
+    const isAdmin = session.role_id === 1;
+    const userId = session.user_id;
+
+    // Check ownership if not admin
+    if (!isAdmin) {
+        const ticket: any[] = await prisma.$queryRawUnsafe(
+            `SELECT created_user_id FROM tickets WHERE ticket_id = ?`, BigInt(id)
+        );
+        if (!ticket.length || ticket[0].created_user_id.toString() !== userId.toString()) {
+            throw new Error('You do not have permission to delete this ticket.');
+        }
+    }
+
+    await prisma.$executeRawUnsafe(
+        `UPDATE tickets SET deleted_at = NOW() WHERE ticket_id = ?`, BigInt(id)
+    );
     revalidatePath('/dashboard/tickets');
     return { success: true };
 }
 
 export async function closeTicket(ticket_id: string) {
+    const session = await getSession();
+    if (!session) throw new Error('Unauthorized');
+
+    const isAdmin = session.role_id === 1;
+    const userId = session.user_id;
+
+    // Optional: Only Admin or the Original Creator can close their own ticket
+    // If you want ONLY admins to close tickets, change this logic.
+    if (!isAdmin) {
+        const ticket: any[] = await prisma.$queryRawUnsafe(
+            `SELECT created_user_id FROM tickets WHERE ticket_id = ?`, BigInt(ticket_id)
+        );
+        if (!ticket.length || ticket[0].created_user_id.toString() !== userId.toString()) {
+            throw new Error('You do not have permission to close this ticket.');
+        }
+    }
+
     // Find the "Close" status (flexible name match)
     const closeStatuses: any[] = await prisma.$queryRawUnsafe(
         `SELECT ticket_status_id FROM ticket_statuses WHERE LOWER(ticket_name) LIKE '%close%' LIMIT 1`
@@ -455,8 +525,8 @@ export async function closeTicket(ticket_id: string) {
     const closeStatusId = Number(closeStatuses[0].ticket_status_id);
 
     await prisma.$executeRawUnsafe(
-        `UPDATE tickets SET ticket_status_id = ?, updated_at = NOW(), updated_user_id = 1 WHERE ticket_id = ?`,
-        closeStatusId, BigInt(ticket_id)
+        `UPDATE tickets SET ticket_status_id = ?, updated_at = NOW(), updated_user_id = ? WHERE ticket_id = ?`,
+        closeStatusId, BigInt(userId), BigInt(ticket_id)
     );
 
     revalidatePath(`/dashboard/tickets/${ticket_id}`);

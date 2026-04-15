@@ -111,7 +111,6 @@ export default function CreateTicketPage() {
 
       await saveTicket({ 
         ...values, 
-        created_user_id: 1, 
         ticket_number: ticketNumber,
         files: processedFiles
       });

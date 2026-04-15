@@ -75,10 +75,17 @@ export async function getCurrentUser() {
   if (!result.length) return null;
   
   const user = result[0];
+  let permissionsArr = [];
+  try {
+    permissionsArr = JSON.parse(user.permissions || '[]');
+  } catch (e) {
+    permissionsArr = user.permissions ? user.permissions.split(',').map((p: string) => p.trim()) : [];
+  }
+
   return {
     ...user,
     user_id: user.user_id.toString(),
-    permissions: user.permissions ? user.permissions.split(',').map((p: string) => p.trim()) : []
+    permissions: permissionsArr
   };
 }
 

@@ -51,6 +51,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const currentPathKey = pathname === '/dashboard' ? '/dashboard' : pathname;
 
+  const userPermissions = user?.permissions || [];
+  const hasPermission = (p: string) => userPermissions.includes(p);
+  const hasAnyPermission = (ps: string[]) => ps.some(p => userPermissions.includes(p));
+
   const menuItems = [
     {
       key: '/dashboard',
@@ -62,32 +66,38 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       icon: <ContainerOutlined />,
       label: 'Tickets',
       children: [
-        { key: '/tickets', label: 'All Tickets' },
-        { key: '/tickets/create', label: 'Create Ticket' },
-      ],
+        ...(hasPermission('view_tickets') ? [{ key: '/tickets', label: 'All Tickets' }] : []),
+        ...(hasPermission('create_tickets') ? [{ key: '/tickets/create', label: 'Create Ticket' }] : []),
+      ].filter(item => item !== null),
     },
-    {
-      key: 'masterGroup',
-      icon: <DatabaseOutlined />,
-      label: 'Referential',
-      children: [
-        { key: '/referential/categories', label: 'Categories' },
-        { key: '/referential/divisions', label: 'Divisions' },
-        { key: '/referential/priorities', label: 'Priorities' },
-        { key: '/referential/statuses', label: 'Statuses' },
-        { key: '/referential/types', label: 'Ticket Types' },
-      ],
-    },
-    {
-      key: 'settingsGroup',
-      icon: <SettingOutlined />,
-      label: 'Permissions',
-      children: [
-        { key: '/permissions/users', label: 'Users' },
-        { key: '/permissions/roles', label: 'Roles & Permissions' },
-      ],
-    },
-  ];
+    // Master / Referential Group
+    ...(hasAnyPermission(['view_categories', 'view_divisions', 'view_priorities', 'view_statuses', 'view_types']) ? [
+      {
+        key: 'masterGroup',
+        icon: <DatabaseOutlined />,
+        label: 'Referential',
+        children: [
+          ...(hasPermission('view_categories') ? [{ key: '/referential/categories', label: 'Categories' }] : []),
+          ...(hasPermission('view_divisions') ? [{ key: '/referential/divisions', label: 'Divisions' }] : []),
+          ...(hasPermission('view_priorities') ? [{ key: '/referential/priorities', label: 'Priorities' }] : []),
+          ...(hasPermission('view_statuses') ? [{ key: '/referential/statuses', label: 'Statuses' }] : []),
+          ...(hasPermission('view_types') ? [{ key: '/referential/types', label: 'Ticket Types' }] : []),
+        ],
+      },
+    ] : []),
+    // Settings / Permissions Group
+    ...(hasAnyPermission(['view_users', 'view_roles']) ? [
+      {
+        key: 'settingsGroup',
+        icon: <SettingOutlined />,
+        label: 'Permissions',
+        children: [
+          ...(hasPermission('view_users') ? [{ key: '/permissions/users', label: 'Users' }] : []),
+          ...(hasPermission('view_roles') ? [{ key: '/permissions/roles', label: 'Roles & Permissions' }] : []),
+        ],
+      },
+    ] : []),
+  ].filter(item => item !== null && (item.children ? item.children.length > 0 : true));
 
   return (
     <Layout className="min-h-screen bg-app-bg transition-colors duration-300">
@@ -101,8 +111,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         style={{ overflow: 'auto', height: '100vh', position: 'sticky', top: 0, left: 0 }}
       >
         <div className="flex h-[72px] items-center px-6 border-b border-card-border transition-all mt-2">
+          <div className={`inline-flex items-center justify-center w-10 h-10 transform hover:rotate-2 transition-transform`}>
+                <img 
+                  src={isDarkMode ? "/logoapp.jpg" : "/logoapplight.jpg"} 
+                  alt="Tea on Tech Logo" 
+                  className="object-contain rounded-[10px]"
+                />
+             </div>
           {!collapsed && (
-            <span className="font-black text-[20px] tracking-tighter whitespace-nowrap text-text-primary">
+            <span className={`font-black text-[20px] tracking-tighter whitespace-nowrap ms-2 transition-colors duration-300 ${isDarkMode ? 'text-primary' : 'text-text-primary'}`}>
               {process.env.NEXT_PUBLIC_APP_NAME || 'Tea on Tech'}
             </span>
           )}
@@ -128,7 +145,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <Menu
             mode="inline"
             selectedKeys={[currentPathKey]}
-            defaultOpenKeys={['ticketsGroup', 'masterGroup']}
+            defaultOpenKeys={['ticketsGroup', 'masterGroup', 'settingsGroup']}
             items={menuItems}
             onClick={handleMenuClick}
             className="border-none mt-6 font-medium bg-transparent"

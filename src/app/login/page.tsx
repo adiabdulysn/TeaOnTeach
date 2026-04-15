@@ -138,7 +138,7 @@ export default function LoginPage() {
         </div>
         
         <div className="text-center mt-12">
-            <Text className={`text-[10px] font-bold tracking-[0.3em] uppercase ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>
+            <Text className={`text-[8px] tracking-[0.3em] uppercase ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>
                 {appCopyright} &copy; {new Date().getFullYear()}
             </Text>
         </div>
