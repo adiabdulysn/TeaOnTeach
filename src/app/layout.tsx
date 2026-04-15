@@ -38,7 +38,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body 
-        className="min-h-full flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100"
+        className="min-h-full flex flex-col transition-colors duration-300"
         suppressHydrationWarning
       >
         <script

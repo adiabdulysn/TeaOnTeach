@@ -20,6 +20,9 @@ const { Title, Text } = Typography;
 
 // ── Simple Statistic Mini Card ──────────────────────────────────────────────
 function StatMiniCard({ title, value, color, icon, loading }: any) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+  
   if (loading) return <Skeleton.Button active style={{ height: 100, width: '100%', borderRadius: 20 }} />;
   
   return (

@@ -190,4 +190,13 @@
   .ant-message-custom-content > span:last-child {
     color: var(--text-primary) !important;
   }
+
+  /* Structural Components (Freeze & Flash Prevention) */
+  .ant-layout-header {
+    background: var(--header-bg) !important;
+  }
+
+  .ant-layout-sider {
+    background: var(--sidebar-bg) !important;
+  }
 }

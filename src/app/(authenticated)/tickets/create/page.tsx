@@ -269,7 +269,7 @@ export default function CreateTicketPage() {
       <div className="w-full pb-10 transition-colors">
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
-         <Space direction="horizontal" size="middle">
+         <Space orientation="horizontal" size="middle">
             <Button icon={<ArrowLeftOutlined />} onClick={() => router.push('/tickets')} className="rounded-full shadow-sm bg-card-bg border-card-border text-text-secondary hover:text-primary" />
             <div>
                <Title level={4} className="m-0 text-text-primary">Ticket Registration</Title>
@@ -296,6 +296,7 @@ export default function CreateTicketPage() {
             <Form form={form} layout="vertical" onFinish={onFinish} autoComplete="off" preserve={true}>
                {fetching ? (
                  <div className="space-y-8">
+                    <Form form={form} component={false} />
                     <Skeleton active />
                     <Skeleton active />
                  </div>

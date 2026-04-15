@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Card, Typography, message, Space, Select, Switch } from 'antd';
+import { Form, Input, Button, Card, Typography, App, Space, Select, Switch, Skeleton } from 'antd';
 import { ArrowLeftOutlined, SaveOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import { saveUser, getRoles } from '@/app/actions/master';
@@ -12,6 +12,7 @@ export default function CreateUserPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [roles, setRoles] = useState<any[]>([]);
+  const { message } = App.useApp();
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -39,10 +40,17 @@ export default function CreateUserPage() {
     }
   };
 
+  if (loading && !roles.length) return (
+    <div className="max-w-4xl mx-auto">
+      <Form form={form} component={false} />
+      <Skeleton active paragraph={{ rows: 10 }} />
+    </div>
+  );
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-6 flex items-center justify-between">
-        <Space direction="vertical" size={0}>
+        <Space orientation="vertical" size={0}>
           <div className="flex items-center gap-2 mb-1">
             <Button 
                 type="text" 

@@ -7,10 +7,11 @@ import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { resetPassword } from '../actions/auth';
 import { useTheme } from 'next-themes';
+import { Suspense } from 'react';
 
 const { Title, Text } = Typography;
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const { message } = App.useApp();
   const { resolvedTheme } = useTheme();
   const [loading, setLoading] = useState(false);
@@ -187,5 +188,17 @@ export default function ResetPasswordPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen w-full flex items-center justify-center bg-slate-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }

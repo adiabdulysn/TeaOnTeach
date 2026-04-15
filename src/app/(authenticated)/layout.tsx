@@ -26,10 +26,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [collapsed, setCollapsed] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [mounted, setMounted] = useState(false);
-  const { theme: currentTheme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const router = useRouter();
 
-  // Handle hydration
   useEffect(() => {
     setMounted(true);
     const fetchUser = async () => {
@@ -38,8 +37,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     };
     fetchUser();
   }, []);
+
+  const isDarkMode = mounted ? resolvedTheme === 'dark' : false;
   const pathname = usePathname();
-  const { token } = theme.useToken();
 
   const handleMenuClick = async ({ key }: { key: string }) => {
     if (key === 'logout') {
@@ -50,23 +50,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   const currentPathKey = pathname === '/dashboard' ? '/dashboard' : pathname;
-
-  const pathLabels: Record<string, string> = {
-    'referential': 'Referential',
-    'permissions': 'Permissions',
-    'tickets': 'Tickets',
-    'dashboard': 'Dashboard',
-    'categories': 'Categories',
-    'divisions': 'Divisions',
-    'priorities': 'Priorities',
-    'statuses': 'Statuses',
-    'types': 'Ticket Types',
-    'users': 'Users',
-    'roles': 'Roles & Permissions',
-    'create': 'Create',
-    'edit': 'Edit',
-    'profile': 'My Profile'
-  };
 
   const menuItems = [
     {
@@ -112,10 +95,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         trigger={null} 
         collapsible 
         collapsed={collapsed}
-        theme={mounted ? (resolvedTheme === 'dark' ? 'dark' : 'light') : 'light'}
+        theme={isDarkMode ? 'dark' : 'light'}
         width={260}
         className="border-r border-card-border shadow-sm z-20"
-        style={{ overflow: 'auto', height: '100vh', position: 'sticky', top: 0, left: 0, backgroundColor: 'var(--sidebar-bg)' }}
+        style={{ overflow: 'auto', height: '100vh', position: 'sticky', top: 0, left: 0 }}
       >
         <div className="flex h-[72px] items-center px-6 border-b border-card-border transition-all mt-2">
           {!collapsed && (
@@ -157,9 +140,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Header 
           className="flex items-center justify-between px-6 shadow-sm z-10 sticky top-0 border-b border-card-border transition-all"
           style={{ 
-            background: mounted 
-              ? (resolvedTheme === 'dark' ? 'rgba(9, 9, 11, 0.82)' : 'rgba(255, 255, 255, 0.82)') 
-              : 'rgba(255, 255, 255, 0.82)', 
             backdropFilter: 'blur(8px)', 
             height: '72px', 
             lineHeight: '72px' 
@@ -176,14 +156,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <div className="flex items-center gap-2">
             {/* Theme Toggle */}
-            {mounted && (
-              <Button
-                type="text"
-                icon={resolvedTheme === 'dark' ? <SunOutlined className="text-yellow-400" /> : <MoonOutlined className="text-text-secondary" />}
-                onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-                className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-card-bg transition-all"
-              />
-            )}
+            <Button
+              type="text"
+              icon={isDarkMode ? <SunOutlined className="text-yellow-400" /> : <MoonOutlined className="text-text-secondary" />}
+              onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
+              className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-card-bg transition-all"
+            />
 
             <Dropdown
               menu={{

@@ -140,8 +140,18 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
     }
   };
 
-  if (loading) return <div className="p-10 max-w-6xl mx-auto"><Skeleton active paragraph={{ rows: 12 }} /></div>;
-  if (!ticket) return <div className="p-10"><Empty description="Ticket not found" /></div>;
+  if (loading) return (
+    <div className="p-10 max-w-6xl mx-auto">
+      <Form form={form} component={false} />
+      <Skeleton active paragraph={{ rows: 12 }} />
+    </div>
+  );
+  if (!ticket) return (
+    <div className="p-10">
+      <Form form={form} component={false} />
+      <Empty description="Ticket not found" />
+    </div>
+  );
 
   return (
     <App>
@@ -203,9 +213,9 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                   <Text strong className="text-primary font-mono text-sm tracking-widest uppercase">
                     Ticket #{ticket.ticket_number}
                   </Text>
-                  <Divider type="vertical" className="bg-card-border h-4" />
+                  <Divider orientation="vertical" className="bg-card-border h-4" />
                   <Text className="text-text-secondary text-xs font-medium">Internal System Record</Text>
-                  <Divider type="vertical" className="bg-card-border h-4" />
+                  <Divider orientation="vertical" className="bg-card-border h-4" />
                   <Tag color={ticket.status_color} className="px-4 py-1.5 m-0 text-sm font-bold border rounded" style={{ color: ticket.status_color }}>
                     {ticket.status_name}
                   </Tag>

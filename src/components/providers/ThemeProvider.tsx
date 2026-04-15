@@ -5,37 +5,21 @@ import { ConfigProvider, theme, App } from 'antd';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { ThemeProvider as NextThemesProvider, useTheme } from 'next-themes';
 
-// Standard Ant Design Primary Blue
 const CORPORATE_BLUE = '#1677ff';
 
 function AntdThemeProvider({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-
-  // Avoid hydration mismatch
+  
+  // Set to true after first client-side mount to safely use client-only logic
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  if (!mounted) {
-    return (
-      <AntdRegistry>
-        <ConfigProvider
-          theme={{
-            token: { 
-              colorPrimary: CORPORATE_BLUE, 
-              borderRadius: 8,
-              fontFamily: 'inherit'
-            },
-          }}
-        >
-          {children}
-        </ConfigProvider>
-      </AntdRegistry>
-    );
-  }
-
-  const isDarkMode = resolvedTheme === 'dark';
+  // During SSR (server-side), we MUST use a consistent initial state.
+  // We'll use the 'dark' algorithm if the document is actually dark via class (client-side only trick)
+  // But wait! to avoid hydration error, if !mounted we use false, but suppressed by suppressHydrationWarning.
+  const isDarkMode = mounted ? resolvedTheme === 'dark' : false;
 
   return (
     <ConfigProvider
@@ -46,10 +30,9 @@ function AntdThemeProvider({ children }: { children: React.ReactNode }) {
           colorInfo: CORPORATE_BLUE,
           borderRadius: 8,
           fontFamily: 'inherit',
-          // Use CSS variables for specific overrides (Filament Zinc Palette)
           colorBgContainer: isDarkMode ? '#18181b' : '#ffffff',
           colorBgLayout: isDarkMode ? '#09090b' : '#f8fafc',
-          colorBorderSecondary: isDarkMode ? '#27272a' : '#f1f5f9',
+          colorBorderSecondary: isDarkMode ? '#27272a' : '#e2e8f0',
         },
         components: {
           Button: {
@@ -78,7 +61,6 @@ function AntdThemeProvider({ children }: { children: React.ReactNode }) {
             borderRadius: 12,
             headerBg: 'transparent',
             headerColor: isDarkMode ? '#a1a1aa' : '#64748b',
-            headerFontWeight: 600,
             footerBg: 'transparent',
             cellPaddingInline: 16,
             cellPaddingBlock: 16,
