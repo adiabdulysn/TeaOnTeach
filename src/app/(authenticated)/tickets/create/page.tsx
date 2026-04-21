@@ -137,17 +137,17 @@ export default function CreateTicketPage() {
               <Col xs={24} md={16}>
                 <Form.Item
                   name="ticket_subject"
-                  label={<span className="font-bold text-text-primary">Issue Subject</span>}
+                  label={<span className="font-bold text-text-primary">Subject</span>}
                   rules={[{ required: true, message: 'Please describe the subject' }]}
                 >
-                  <Input placeholder="What's the issue?" className="h-10 rounded-lg border-card-border bg-app-bg text-text-primary" />
+                  <Input placeholder="Enter subject" className="h-10 rounded-lg border-card-border bg-app-bg text-text-primary" />
                 </Form.Item>
               </Col>
               <Col xs={24} md={8}>
                 <Form.Item
                   name="requestor_name"
-                  label={<span className="font-bold text-text-primary">Reporter</span>}
-                  rules={[{ required: true, message: 'Requester name required' }]}
+                  label={<span className="font-bold text-text-primary">Requestor</span>}
+                  rules={[{ required: true, message: 'Requestor name required' }]}
                 >
                   <Input placeholder="User name" className="h-10 rounded-lg border-card-border bg-app-bg text-text-primary" />
                 </Form.Item>
@@ -169,7 +169,7 @@ export default function CreateTicketPage() {
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>
-                <Form.Item name="division_id" label={<span className="font-bold text-text-primary">Division</span>} rules={[{ required: true }]}>
+                <Form.Item name="division_id" label={<span className="font-bold text-text-primary">Department</span>} rules={[{ required: true }]}>
                    <Select placeholder="Select department" className="h-10">
                       {masterData.divisions.map((d: any) => (
                         <Select.Option key={d.division_id} value={d.division_id}>{d.division_name}</Select.Option>
@@ -240,12 +240,12 @@ export default function CreateTicketPage() {
       icon: <CloudUploadOutlined className="stepper-icon-style" />,
       content: (
          <div className="space-y-6 animate-in fade-in duration-500">
-           <Form.Item name="ticket_detail" label={<span className="font-bold text-text-primary">Detailed Description</span>} rules={[{ required: true }]}>
-              <TextArea rows={8} placeholder="Describe the problem in detail..." className="rounded-2xl p-4 text-base bg-app-bg text-text-primary border-card-border" />
+           <Form.Item name="ticket_detail" label={<span className="font-bold text-text-primary">Description</span>} rules={[{ required: true }]}>
+              <TextArea rows={8} placeholder="Describe the issue..." className="rounded-2xl p-4 text-base bg-app-bg text-text-primary border-card-border" />
            </Form.Item>
            <Form.Item 
               name="attachments" 
-              label={<span className="font-bold text-text-primary">Evidence / Attachments</span>}
+              label={<span className="font-bold text-text-primary">Attachments</span>}
               valuePropName="fileList"
               getValueFromEvent={(e: any) => {
                 if (Array.isArray(e)) return e;

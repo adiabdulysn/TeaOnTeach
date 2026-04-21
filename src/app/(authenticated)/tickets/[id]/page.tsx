@@ -226,14 +226,14 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                   <div className="flex items-center gap-3">
                     <Avatar size="small" icon={<UserOutlined />} className="bg-app-bg text-text-secondary" />
                     <div className="flex flex-col">
-                      <Text type="secondary" className="text-[10px] uppercase font-bold tracking-widest leading-none mb-1 text-text-secondary">Reporter</Text>
+                      <Text type="secondary" className="text-[10px] uppercase font-bold tracking-widest leading-none mb-1 text-text-secondary">Requestor</Text>
                       <Text strong className="text-text-primary text-sm leading-none">{ticket.requestor_name}</Text>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 border-l pl-8 border-card-border">
                     <ClockCircleOutlined className="text-text-secondary opacity-50 text-lg" />
                     <div className="flex flex-col">
-                      <Text type="secondary" className="text-[10px] uppercase font-bold tracking-widest leading-none mb-1 text-text-secondary">Reported On</Text>
+                      <Text type="secondary" className="text-[10px] uppercase font-bold tracking-widest leading-none mb-1 text-text-secondary">Created At</Text>
                       <Text strong className="text-text-primary text-sm leading-none">
                         {new Date(ticket.created_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
                       </Text>
@@ -254,7 +254,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                 <div className="w-8 h-8 rounded-lg bg-card-bg border border-card-border flex items-center justify-center">
                   <InfoCircleOutlined className="text-text-primary text-base" />
                 </div>
-                <Title level={5} className="m-0 text-text-primary uppercase tracking-widest text-[11px] font-bold">Issue Brief</Title>
+                <Title level={5} className="m-0 text-text-primary uppercase tracking-widest text-[11px] font-bold">Description</Title>
               </div>
               <div className="bg-card-bg rounded-3xl p-8 shadow-sm border border-card-border hover:shadow-md transition-shadow">
                 
@@ -481,14 +481,14 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                     <Divider className="my-2 border-card-border" />
 
                     <div>
-                      <Text type="secondary" className="text-[10px] uppercase font-bold tracking-widest block mb-1 text-text-secondary">Division</Text>
+                      <Text type="secondary" className="text-[10px] uppercase font-bold tracking-widest block mb-1 text-text-secondary">Department</Text>
                       <Text strong className="text-text-primary text-[14px]">
                         {ticket.division_name}
                       </Text>
                     </div>
 
                     <div>
-                      <Text type="secondary" className="text-[10px] uppercase font-bold tracking-widest block mb-1 text-text-secondary">Issuer Account</Text>
+                      <Text type="secondary" className="text-[10px] uppercase font-bold tracking-widest block mb-1 text-text-secondary">Created By</Text>
                       <Text strong className="text-text-primary flex items-center gap-2">
                         <Avatar size="small" icon={<UserOutlined />} className="bg-app-bg text-text-secondary" />
                         &nbsp; {ticket.creator_name}
