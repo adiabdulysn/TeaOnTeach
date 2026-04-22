@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requirePermission } from '@/lib/authz';
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await requirePermission('view_roles');
     const { id } = await params;
     const role = await prisma.roles.findUnique({
       where: { role_id: parseInt(id) }
@@ -16,6 +18,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await requirePermission('edit_roles');
     const body = await request.json();
     const { role_name, permissions, description } = body;
     const { id } = await params;
@@ -24,7 +27,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       where: { role_id: parseInt(id) },
       data: {
         role_name,
-        permissions,
+        permissions: typeof permissions === 'string' ? permissions : JSON.stringify(permissions ?? []),
         description,
         updated_at: new Date()
       }
@@ -37,6 +40,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await requirePermission('delete_roles');
     const { id } = await params;
     await prisma.roles.delete({
       where: { role_id: parseInt(id) }

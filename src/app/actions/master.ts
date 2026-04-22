@@ -2,23 +2,20 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { getSession } from '@/lib/auth';
+import { requireAnyPermission, requirePermission } from '@/lib/authz';
 
-async function requireAdmin() {
-  const session = await getSession();
-  if (!session || session.role_id !== 1) {
-    throw new Error('Unauthorized: Administrator access required.');
-  }
-  return session;
+async function requireMasterAccess(permission: string) {
+  return await requirePermission(permission);
 }
 
 // --- Categories ---
 export async function getCategories() {
+  await requireMasterAccess('view_categories');
   return await prisma.$queryRawUnsafe(`SELECT * FROM categories ORDER BY category_id DESC`);
 }
 
 export async function saveCategory(data: any) {
-  await requireAdmin();
+  await requireAnyPermission([data?.category_id ? 'edit_categories' : 'create_categories']);
   const { category_id, category_name, color, icon } = data;
   
   if (category_id) {
@@ -38,7 +35,7 @@ export async function saveCategory(data: any) {
 }
 
 export async function deleteCategory(id: number) {
-  await requireAdmin();
+  await requirePermission('delete_categories');
   await prisma.categories.delete({ where: { category_id: id } });
   revalidatePath('/dashboard/master/categories');
 }
@@ -50,11 +47,12 @@ export async function getCategoryById(id: number) {
 
 // --- Divisions ---
 export async function getDivisions() {
+  await requireMasterAccess('view_divisions');
   return await prisma.divisions.findMany({ orderBy: { division_id: 'desc' } });
 }
 
 export async function saveDivision(data: any) {
-  await requireAdmin();
+  await requireAnyPermission([data?.division_id ? 'edit_divisions' : 'create_divisions']);
   if (data.division_id) {
     await prisma.divisions.update({ where: { division_id: data.division_id }, data: { ...data, updated_at: new Date() } });
   } else {
@@ -64,7 +62,7 @@ export async function saveDivision(data: any) {
 }
 
 export async function deleteDivision(id: number) {
-  await requireAdmin();
+  await requirePermission('delete_divisions');
   await prisma.divisions.delete({ where: { division_id: id } });
   revalidatePath('/dashboard/master/divisions');
 }
@@ -75,11 +73,12 @@ export async function getDivisionById(id: number) {
 
 // --- Priorities ---
 export async function getPriorities() {
+  await requireMasterAccess('view_priorities');
   return await prisma.$queryRawUnsafe(`SELECT * FROM ticket_priorities ORDER BY ticket_priority_id DESC`);
 }
 
 export async function savePriority(data: any) {
-  await requireAdmin();
+  await requireAnyPermission([data?.ticket_priority_id ? 'edit_priorities' : 'create_priorities']);
   const { ticket_priority_id, ticket_priority_name, color, icon, is_default } = data;
   const isDefault = is_default ? 1 : 0;
 
@@ -99,7 +98,7 @@ export async function savePriority(data: any) {
 }
 
 export async function deletePriority(id: number) {
-  await requireAdmin();
+  await requirePermission('delete_priorities');
   await prisma.ticket_priorities.delete({ where: { ticket_priority_id: id } });
   revalidatePath('/dashboard/master/priorities');
 }
@@ -116,11 +115,12 @@ export async function getPriorityById(id: number) {
 
 // --- Statuses ---
 export async function getStatuses() {
+  await requireMasterAccess('view_statuses');
   return await prisma.ticket_statuses.findMany({ orderBy: { ticket_status_id: 'desc' } });
 }
 
 export async function saveStatus(data: any) {
-  await requireAdmin();
+  await requireAnyPermission([data?.ticket_status_id ? 'edit_statuses' : 'create_statuses']);
   if (data.ticket_status_id) {
     await prisma.ticket_statuses.update({ where: { ticket_status_id: data.ticket_status_id }, data: { ...data, updated_at: new Date() } });
   } else {
@@ -130,7 +130,7 @@ export async function saveStatus(data: any) {
 }
 
 export async function deleteStatus(id: number) {
-  await requireAdmin();
+  await requirePermission('delete_statuses');
   await prisma.ticket_statuses.delete({ where: { ticket_status_id: id } });
   revalidatePath('/dashboard/master/statuses');
 }
@@ -141,11 +141,12 @@ export async function getStatusById(id: number) {
 
 // --- Ticket Types ---
 export async function getTypes() {
+  await requireMasterAccess('view_types');
   return await prisma.ticket_types.findMany({ orderBy: { ticket_type_id: 'desc' } });
 }
 
 export async function saveType(data: any) {
-  await requireAdmin();
+  await requireAnyPermission([data?.ticket_type_id ? 'edit_types' : 'create_types']);
   if (data.ticket_type_id) {
     await prisma.ticket_types.update({ where: { ticket_type_id: data.ticket_type_id }, data: { ...data, updated_at: new Date() } });
   } else {
@@ -155,7 +156,7 @@ export async function saveType(data: any) {
 }
 
 export async function deleteType(id: number) {
-  await requireAdmin();
+  await requirePermission('delete_types');
   await prisma.ticket_types.delete({ where: { ticket_type_id: id } });
   revalidatePath('/dashboard/master/types');
 }
@@ -168,10 +169,12 @@ export async function getTypeById(id: number) {
 import bcrypt from 'bcryptjs';
 
 export async function getRoles() {
+  await requirePermission('view_roles');
   return await prisma.roles.findMany({ orderBy: { role_name: 'asc' } });
 }
 
 export async function getUsers() {
+  await requirePermission('view_users');
   const users = await prisma.users.findMany({
     include: { roles: true },
     orderBy: { user_id: 'desc' }
@@ -186,6 +189,7 @@ export async function getUsers() {
 }
 
 export async function getUserById(id: string) {
+  await requirePermission('view_users');
   const user = await prisma.users.findUnique({
     where: { user_id: BigInt(id) },
     include: { roles: true }
@@ -201,7 +205,7 @@ export async function getUserById(id: string) {
 }
 
 export async function saveUser(data: any) {
-  await requireAdmin();
+  await requireAnyPermission([data?.user_id ? 'edit_users' : 'create_users']);
   const { user_id, user_name, full_name, email, password, role_id, is_active } = data;
   
   const userData: any = {
@@ -239,7 +243,7 @@ export async function saveUser(data: any) {
 }
 
 export async function deleteUser(id: string) {
-  await requireAdmin();
+  await requirePermission('delete_users');
   await prisma.users.delete({
     where: { user_id: BigInt(id) }
   });

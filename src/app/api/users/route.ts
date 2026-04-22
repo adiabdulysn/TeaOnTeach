@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-
-// Password hashing is generally required for users, but for the scope of this demonstration 
-// without a specific hashing library requested (like bcryptjs), we'll ingest the password directly.
-// IMPORTANT: In production, use bcrypt or argon2 to hash `password`.
+import bcrypt from 'bcryptjs';
+import { requirePermission } from '@/lib/authz';
 
 export async function GET() {
   try {
+    await requirePermission('view_users');
     const users = await prisma.users.findMany({
       include: {
         roles: true // Include the role relationship to get the role_name
@@ -33,15 +32,22 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    await requirePermission('create_users');
     const body = await request.json();
     const { user_name, full_name, email, password, role_id, is_active } = body;
+
+    if (!password || typeof password !== 'string' || password.length < 10) {
+      return NextResponse.json({ error: 'Password must be at least 10 characters.' }, { status: 400 });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12);
 
     const newUser = await prisma.users.create({
       data: {
         user_name,
         full_name,
         email,
-        password, // FIXME: Add bcrypt hashing here
+        password: passwordHash,
         role_id: parseInt(role_id),
         is_active: is_active ?? true,
         created_at: new Date(),

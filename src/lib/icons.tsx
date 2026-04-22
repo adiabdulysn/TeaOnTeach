@@ -38,7 +38,7 @@ export const getCategoryIcon = (name: string | null) => {
   const iconObj = CATEGORY_ICONS.find(i => i.name === name);
   if (iconObj) return iconObj.icon;
   
-  const IconComponent = (AntIcons as any)[name];
+  const IconComponent = (AntIcons as unknown as Record<string, React.ComponentType>)[name];
   return IconComponent ? <IconComponent /> : <AntIcons.TagOutlined />;
 };
 
@@ -47,6 +47,6 @@ export const getPriorityIcon = (name: string | null) => {
   const iconObj = PRIORITY_ICONS.find(i => i.name === name);
   if (iconObj) return iconObj.icon;
   
-  const IconComponent = (AntIcons as any)[name];
+  const IconComponent = (AntIcons as unknown as Record<string, React.ComponentType>)[name];
   return IconComponent ? <IconComponent /> : <AntIcons.ThunderboltOutlined />;
 };

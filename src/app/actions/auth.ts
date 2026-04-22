@@ -6,52 +6,67 @@ import { login_session, logout_session, getSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { sendResetPasswordEmail } from '@/lib/mail';
 import crypto from 'crypto';
+import { requireSession } from '@/lib/authz';
+import { rateLimitOrThrow } from '@/lib/rate-limit';
 
 export async function login(formData: any) {
   const { username, password, remember } = formData;
 
   try {
-    // 1. Find user by username OR email
-    const userResult: any[] = await prisma.$queryRawUnsafe(
-      `SELECT u.*, r.role_name, r.permissions 
-       FROM users u 
-       JOIN roles r ON u.role_id = r.role_id 
-       WHERE (u.user_name = ? OR u.email = ?) AND u.is_active = 1 
-       LIMIT 1`,
-      username, username
-    );
+    await rateLimitOrThrow(`login:${String(username ?? '').toLowerCase()}`, {
+      windowMs: 60_000,
+      max: 8,
+    });
 
-    if (!userResult || userResult.length === 0) {
+    const userData = await prisma.users.findFirst({
+      where: {
+        is_active: true,
+        OR: [{ user_name: username }, { email: username }],
+      },
+      include: { roles: true },
+      orderBy: { user_id: 'desc' },
+    });
+
+    if (!userData) {
       return { error: 'Invalid username or account inactive' };
     }
 
-    const userData = userResult[0];
-
     // 2. Verify password
-    let isPasswordValid = false;
-    if (userData.password.startsWith('$2')) {
-      isPasswordValid = await bcrypt.compare(password, userData.password);
-    } else {
-      isPasswordValid = password === userData.password;
-    }
+    const isPasswordValid = await bcrypt.compare(String(password ?? ''), userData.password);
 
     if (!isPasswordValid) {
       return { error: 'Invalid password' };
     }
 
+    // Optional: Auto-upgrade legacy plaintext passwords (if any exist) safely.
+    if (!userData.password.startsWith('$2')) {
+      const newHash = await bcrypt.hash(String(password ?? ''), 12);
+      await prisma.users.update({
+        where: { user_id: userData.user_id },
+        data: { password: newHash, updated_at: new Date() },
+      });
+      userData.password = newHash;
+    }
+
     // 3. Create session
-    await login_session(userData, remember);
+    await login_session(
+      {
+        ...userData,
+        permissions: userData.roles?.permissions,
+      },
+      remember,
+    );
 
     // 4. Update login_at
-    await prisma.$executeRawUnsafe(
-      `UPDATE users SET login_at = NOW() WHERE user_id = ?`,
-      userData.user_id
-    );
+    await prisma.users.update({
+      where: { user_id: userData.user_id },
+      data: { login_at: new Date() },
+    });
 
     return { success: true };
   } catch (error) {
     console.error('Login error:', error);
-    return { error: 'An unexpected error occurred' };
+    return { error: 'Login failed' };
   }
 }
 
@@ -64,53 +79,54 @@ export async function getCurrentUser() {
   const session = await getSession();
   if (!session) return null;
 
-  const result: any[] = await prisma.$queryRawUnsafe(
-    `SELECT u.user_id, u.user_name, u.full_name, u.email, r.role_name, r.permissions 
-     FROM users u 
-     JOIN roles r ON u.role_id = r.role_id 
-     WHERE u.user_id = ? LIMIT 1`,
-    BigInt(session.user_id)
-  );
+  const user = await prisma.users.findUnique({
+    where: { user_id: BigInt(session.user_id) },
+    include: { roles: true },
+  });
 
-  if (!result.length) return null;
-  
-  const user = result[0];
-  let permissionsArr = [];
+  if (!user) return null;
+
+  let permissionsArr: string[] = [];
   try {
-    permissionsArr = JSON.parse(user.permissions || '[]');
-  } catch (e) {
-    permissionsArr = user.permissions ? user.permissions.split(',').map((p: string) => p.trim()) : [];
+    permissionsArr = JSON.parse(user.roles?.permissions || '[]');
+  } catch {
+    permissionsArr = user.roles?.permissions
+      ? user.roles.permissions.split(',').map((p: string) => p.trim())
+      : [];
   }
 
   return {
-    ...user,
     user_id: user.user_id.toString(),
-    permissions: permissionsArr
+    user_name: user.user_name,
+    full_name: user.full_name,
+    email: user.email,
+    role_name: user.roles?.role_name,
+    permissions: permissionsArr,
   };
 }
 
 export async function forgotPassword(email: string) {
   try {
     // 1. Find user by email
-    const users: any[] = await prisma.$queryRawUnsafe(
-      `SELECT user_id, email FROM users WHERE email = ? LIMIT 1`,
-      email
-    );
+    const user = await prisma.users.findFirst({
+      where: { email },
+      select: { user_id: true, email: true },
+    });
 
-    if (users.length === 0) {
+    if (!user) {
       return { success: true }; // Security: don't reveal if email exists
     }
 
-    const user = users[0];
-
     // 2. Generate token
     const token = crypto.randomBytes(32).toString('hex');
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
     
     // 3. Save token to DB
-    await prisma.$executeRawUnsafe(
-      `UPDATE users SET verify_token = ? WHERE user_id = ?`,
-      token, user.user_id
-    );
+    await prisma.users.update({
+      where: { user_id: user.user_id },
+      data: { verify_token_hash: tokenHash, verify_token_expires_at: expiresAt },
+    });
 
     // 4. Send Email
     await sendResetPasswordEmail(user.email, token);
@@ -124,26 +140,35 @@ export async function forgotPassword(email: string) {
 
 export async function resetPassword(token: string, newPassword: any) {
   try {
-    // 1. Find user by token
-    const users: any[] = await prisma.$queryRawUnsafe(
-        `SELECT user_id FROM users WHERE verify_token = ? LIMIT 1`,
-        token
-    );
-
-    if (users.length === 0) {
-        return { error: 'Invalid or expired reset token' };
+    if (!token || typeof token !== 'string') return { error: 'Invalid or expired reset token' };
+    if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 10) {
+      return { error: 'Password must be at least 10 characters.' };
     }
 
-    const user = users[0];
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+    const user = await prisma.users.findFirst({
+      where: {
+        verify_token_hash: tokenHash,
+        verify_token_expires_at: { gt: new Date() },
+      },
+      select: { user_id: true },
+    });
+
+    if (!user) return { error: 'Invalid or expired reset token' };
 
     // 2. Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
 
     // 3. Update password and clear token
-    await prisma.$executeRawUnsafe(
-        `UPDATE users SET password = ?, verify_token = NULL WHERE user_id = ?`,
-        hashedPassword, user.user_id
-    );
+    await prisma.users.update({
+      where: { user_id: user.user_id },
+      data: {
+        password: hashedPassword,
+        verify_token_hash: null,
+        verify_token_expires_at: null,
+        updated_at: new Date(),
+      },
+    });
 
     return { success: true };
   } catch (err) {
@@ -153,8 +178,7 @@ export async function resetPassword(token: string, newPassword: any) {
 }
 
 export async function updateUserProfile(data: any) {
-  const session = await getSession();
-  if (!session) return { error: 'Not authenticated' };
+  const session = await requireSession();
 
   try {
     const { full_name, email, user_name } = data;
@@ -162,20 +186,20 @@ export async function updateUserProfile(data: any) {
 
     // 1. Check if user_name is already taken by someone else
     if (user_name) {
-      const existing: any[] = await prisma.$queryRawUnsafe(
-        `SELECT user_id FROM users WHERE user_name = ? AND user_id != ? LIMIT 1`,
-        user_name, userId
-      );
-      if (existing.length > 0) {
+      const existing = await prisma.users.findFirst({
+        where: { user_name, user_id: { not: userId } },
+        select: { user_id: true },
+      });
+      if (existing) {
         return { error: 'Username is already taken' };
       }
     }
 
     // 2. Update profile
-    await prisma.$executeRawUnsafe(
-      `UPDATE users SET full_name = ?, email = ?, user_name = ?, updated_at = NOW() WHERE user_id = ?`,
-      full_name, email, user_name, userId
-    );
+    await prisma.users.update({
+      where: { user_id: userId },
+      data: { full_name, email, user_name, updated_at: new Date() },
+    });
     return { success: true };
   } catch (error) {
     console.error('Update profile error:', error);
@@ -184,40 +208,36 @@ export async function updateUserProfile(data: any) {
 }
 
 export async function changeUserPassword(data: any) {
-  const session = await getSession();
-  if (!session) return { error: 'Not authenticated' };
+  const session = await requireSession();
 
   const { currentPassword, newPassword } = data;
 
   try {
     // 1. Get current user's password hash
-    const users: any[] = await prisma.$queryRawUnsafe(
-      `SELECT password FROM users WHERE user_id = ? LIMIT 1`,
-      BigInt(session.user_id)
-    );
+    const user = await prisma.users.findUnique({
+      where: { user_id: BigInt(session.user_id) },
+      select: { password: true },
+    });
 
-    if (users.length === 0) return { error: 'User not found' };
-
-    const user = users[0];
+    if (!user) return { error: 'User not found' };
 
     // 2. Verify current password
-    let isPasswordValid = false;
-    if (user.password.startsWith('$2')) {
-      isPasswordValid = await bcrypt.compare(currentPassword, user.password);
-    } else {
-      isPasswordValid = currentPassword === user.password;
-    }
+    const isPasswordValid = await bcrypt.compare(String(currentPassword ?? ''), user.password);
 
     if (!isPasswordValid) {
       return { error: 'Current password is incorrect' };
     }
 
+    if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 10) {
+      return { error: 'Password must be at least 10 characters.' };
+    }
+
     // 3. Hash and update new password
-    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-    await prisma.$executeRawUnsafe(
-      `UPDATE users SET password = ?, updated_at = NOW() WHERE user_id = ?`,
-      hashedNewPassword, BigInt(session.user_id)
-    );
+    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+    await prisma.users.update({
+      where: { user_id: BigInt(session.user_id) },
+      data: { password: hashedNewPassword, updated_at: new Date() },
+    });
 
     return { success: true };
   } catch (error) {

@@ -20,6 +20,9 @@
 # production
 /build
 
+# uploads (stored outside /public, served via authenticated API)
+/storage/uploads
+
 # misc
 .DS_Store
 *.pem

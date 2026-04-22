@@ -4857,6 +4857,8 @@ export namespace Prisma {
     ticket_document_id: bigint | null
     ticket_id: bigint | null
     file_name: string | null
+    original_name: string | null
+    storage_name: string | null
     file_path: string | null
     file_size: number | null
     file_extension: string | null
@@ -4868,6 +4870,8 @@ export namespace Prisma {
     ticket_document_id: bigint | null
     ticket_id: bigint | null
     file_name: string | null
+    original_name: string | null
+    storage_name: string | null
     file_path: string | null
     file_size: number | null
     file_extension: string | null
@@ -4879,6 +4883,8 @@ export namespace Prisma {
     ticket_document_id: number
     ticket_id: number
     file_name: number
+    original_name: number
+    storage_name: number
     file_path: number
     file_size: number
     file_extension: number
@@ -4904,6 +4910,8 @@ export namespace Prisma {
     ticket_document_id?: true
     ticket_id?: true
     file_name?: true
+    original_name?: true
+    storage_name?: true
     file_path?: true
     file_size?: true
     file_extension?: true
@@ -4915,6 +4923,8 @@ export namespace Prisma {
     ticket_document_id?: true
     ticket_id?: true
     file_name?: true
+    original_name?: true
+    storage_name?: true
     file_path?: true
     file_size?: true
     file_extension?: true
@@ -4926,6 +4936,8 @@ export namespace Prisma {
     ticket_document_id?: true
     ticket_id?: true
     file_name?: true
+    original_name?: true
+    storage_name?: true
     file_path?: true
     file_size?: true
     file_extension?: true
@@ -5023,7 +5035,9 @@ export namespace Prisma {
   export type Ticket_documentsGroupByOutputType = {
     ticket_document_id: bigint
     ticket_id: bigint
-    file_name: string
+    file_name: string | null
+    original_name: string | null
+    storage_name: string | null
     file_path: string
     file_size: number | null
     file_extension: string | null
@@ -5054,6 +5068,8 @@ export namespace Prisma {
     ticket_document_id?: boolean
     ticket_id?: boolean
     file_name?: boolean
+    original_name?: boolean
+    storage_name?: boolean
     file_path?: boolean
     file_size?: boolean
     file_extension?: boolean
@@ -5067,6 +5083,8 @@ export namespace Prisma {
     ticket_document_id?: boolean
     ticket_id?: boolean
     file_name?: boolean
+    original_name?: boolean
+    storage_name?: boolean
     file_path?: boolean
     file_size?: boolean
     file_extension?: boolean
@@ -5086,7 +5104,9 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       ticket_document_id: bigint
       ticket_id: bigint
-      file_name: string
+      file_name: string | null
+      original_name: string | null
+      storage_name: string | null
       file_path: string
       file_size: number | null
       file_extension: string | null
@@ -5465,6 +5485,8 @@ export namespace Prisma {
     readonly ticket_document_id: FieldRef<"ticket_documents", 'BigInt'>
     readonly ticket_id: FieldRef<"ticket_documents", 'BigInt'>
     readonly file_name: FieldRef<"ticket_documents", 'String'>
+    readonly original_name: FieldRef<"ticket_documents", 'String'>
+    readonly storage_name: FieldRef<"ticket_documents", 'String'>
     readonly file_path: FieldRef<"ticket_documents", 'String'>
     readonly file_size: FieldRef<"ticket_documents", 'Int'>
     readonly file_extension: FieldRef<"ticket_documents", 'String'>
@@ -6779,6 +6801,8 @@ export namespace Prisma {
     ticket_reply_document_id: bigint | null
     ticket_reply_id: bigint | null
     file_name: string | null
+    original_name: string | null
+    storage_name: string | null
     file_path: string | null
     file_size: number | null
     file_extension: string | null
@@ -6790,6 +6814,8 @@ export namespace Prisma {
     ticket_reply_document_id: bigint | null
     ticket_reply_id: bigint | null
     file_name: string | null
+    original_name: string | null
+    storage_name: string | null
     file_path: string | null
     file_size: number | null
     file_extension: string | null
@@ -6801,6 +6827,8 @@ export namespace Prisma {
     ticket_reply_document_id: number
     ticket_reply_id: number
     file_name: number
+    original_name: number
+    storage_name: number
     file_path: number
     file_size: number
     file_extension: number
@@ -6826,6 +6854,8 @@ export namespace Prisma {
     ticket_reply_document_id?: true
     ticket_reply_id?: true
     file_name?: true
+    original_name?: true
+    storage_name?: true
     file_path?: true
     file_size?: true
     file_extension?: true
@@ -6837,6 +6867,8 @@ export namespace Prisma {
     ticket_reply_document_id?: true
     ticket_reply_id?: true
     file_name?: true
+    original_name?: true
+    storage_name?: true
     file_path?: true
     file_size?: true
     file_extension?: true
@@ -6848,6 +6880,8 @@ export namespace Prisma {
     ticket_reply_document_id?: true
     ticket_reply_id?: true
     file_name?: true
+    original_name?: true
+    storage_name?: true
     file_path?: true
     file_size?: true
     file_extension?: true
@@ -6945,7 +6979,9 @@ export namespace Prisma {
   export type Ticket_reply_documentsGroupByOutputType = {
     ticket_reply_document_id: bigint
     ticket_reply_id: bigint
-    file_name: string
+    file_name: string | null
+    original_name: string | null
+    storage_name: string | null
     file_path: string
     file_size: number | null
     file_extension: string | null
@@ -6976,6 +7012,8 @@ export namespace Prisma {
     ticket_reply_document_id?: boolean
     ticket_reply_id?: boolean
     file_name?: boolean
+    original_name?: boolean
+    storage_name?: boolean
     file_path?: boolean
     file_size?: boolean
     file_extension?: boolean
@@ -6989,6 +7027,8 @@ export namespace Prisma {
     ticket_reply_document_id?: boolean
     ticket_reply_id?: boolean
     file_name?: boolean
+    original_name?: boolean
+    storage_name?: boolean
     file_path?: boolean
     file_size?: boolean
     file_extension?: boolean
@@ -7008,7 +7048,9 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       ticket_reply_document_id: bigint
       ticket_reply_id: bigint
-      file_name: string
+      file_name: string | null
+      original_name: string | null
+      storage_name: string | null
       file_path: string
       file_size: number | null
       file_extension: string | null
@@ -7387,6 +7429,8 @@ export namespace Prisma {
     readonly ticket_reply_document_id: FieldRef<"ticket_reply_documents", 'BigInt'>
     readonly ticket_reply_id: FieldRef<"ticket_reply_documents", 'BigInt'>
     readonly file_name: FieldRef<"ticket_reply_documents", 'String'>
+    readonly original_name: FieldRef<"ticket_reply_documents", 'String'>
+    readonly storage_name: FieldRef<"ticket_reply_documents", 'String'>
     readonly file_path: FieldRef<"ticket_reply_documents", 'String'>
     readonly file_size: FieldRef<"ticket_reply_documents", 'Int'>
     readonly file_extension: FieldRef<"ticket_reply_documents", 'String'>
@@ -11806,6 +11850,8 @@ export namespace Prisma {
     role_id: number | null
     is_active: boolean | null
     verify_token: string | null
+    verify_token_hash: string | null
+    verify_token_expires_at: Date | null
     login_at: Date | null
     logout_at: Date | null
     created_at: Date | null
@@ -11821,6 +11867,8 @@ export namespace Prisma {
     role_id: number | null
     is_active: boolean | null
     verify_token: string | null
+    verify_token_hash: string | null
+    verify_token_expires_at: Date | null
     login_at: Date | null
     logout_at: Date | null
     created_at: Date | null
@@ -11836,6 +11884,8 @@ export namespace Prisma {
     role_id: number
     is_active: number
     verify_token: number
+    verify_token_hash: number
+    verify_token_expires_at: number
     login_at: number
     logout_at: number
     created_at: number
@@ -11863,6 +11913,8 @@ export namespace Prisma {
     role_id?: true
     is_active?: true
     verify_token?: true
+    verify_token_hash?: true
+    verify_token_expires_at?: true
     login_at?: true
     logout_at?: true
     created_at?: true
@@ -11878,6 +11930,8 @@ export namespace Prisma {
     role_id?: true
     is_active?: true
     verify_token?: true
+    verify_token_hash?: true
+    verify_token_expires_at?: true
     login_at?: true
     logout_at?: true
     created_at?: true
@@ -11893,6 +11947,8 @@ export namespace Prisma {
     role_id?: true
     is_active?: true
     verify_token?: true
+    verify_token_hash?: true
+    verify_token_expires_at?: true
     login_at?: true
     logout_at?: true
     created_at?: true
@@ -11995,6 +12051,8 @@ export namespace Prisma {
     role_id: number
     is_active: boolean
     verify_token: string | null
+    verify_token_hash: string | null
+    verify_token_expires_at: Date | null
     login_at: Date | null
     logout_at: Date | null
     created_at: Date
@@ -12029,6 +12087,8 @@ export namespace Prisma {
     role_id?: boolean
     is_active?: boolean
     verify_token?: boolean
+    verify_token_hash?: boolean
+    verify_token_expires_at?: boolean
     login_at?: boolean
     logout_at?: boolean
     created_at?: boolean
@@ -12050,6 +12110,8 @@ export namespace Prisma {
     role_id?: boolean
     is_active?: boolean
     verify_token?: boolean
+    verify_token_hash?: boolean
+    verify_token_expires_at?: boolean
     login_at?: boolean
     logout_at?: boolean
     created_at?: boolean
@@ -12081,6 +12143,8 @@ export namespace Prisma {
       role_id: number
       is_active: boolean
       verify_token: string | null
+      verify_token_hash: string | null
+      verify_token_expires_at: Date | null
       login_at: Date | null
       logout_at: Date | null
       created_at: Date
@@ -12466,6 +12530,8 @@ export namespace Prisma {
     readonly role_id: FieldRef<"users", 'Int'>
     readonly is_active: FieldRef<"users", 'Boolean'>
     readonly verify_token: FieldRef<"users", 'String'>
+    readonly verify_token_hash: FieldRef<"users", 'String'>
+    readonly verify_token_expires_at: FieldRef<"users", 'DateTime'>
     readonly login_at: FieldRef<"users", 'DateTime'>
     readonly logout_at: FieldRef<"users", 'DateTime'>
     readonly created_at: FieldRef<"users", 'DateTime'>
@@ -12896,6 +12962,8 @@ export namespace Prisma {
     ticket_document_id: 'ticket_document_id',
     ticket_id: 'ticket_id',
     file_name: 'file_name',
+    original_name: 'original_name',
+    storage_name: 'storage_name',
     file_path: 'file_path',
     file_size: 'file_size',
     file_extension: 'file_extension',
@@ -12924,6 +12992,8 @@ export namespace Prisma {
     ticket_reply_document_id: 'ticket_reply_document_id',
     ticket_reply_id: 'ticket_reply_id',
     file_name: 'file_name',
+    original_name: 'original_name',
+    storage_name: 'storage_name',
     file_path: 'file_path',
     file_size: 'file_size',
     file_extension: 'file_extension',
@@ -13004,6 +13074,8 @@ export namespace Prisma {
     role_id: 'role_id',
     is_active: 'is_active',
     verify_token: 'verify_token',
+    verify_token_hash: 'verify_token_hash',
+    verify_token_expires_at: 'verify_token_expires_at',
     login_at: 'login_at',
     logout_at: 'logout_at',
     created_at: 'created_at',
@@ -13280,7 +13352,9 @@ export namespace Prisma {
     NOT?: ticket_documentsWhereInput | ticket_documentsWhereInput[]
     ticket_document_id?: BigIntFilter<"ticket_documents"> | bigint | number
     ticket_id?: BigIntFilter<"ticket_documents"> | bigint | number
-    file_name?: StringFilter<"ticket_documents"> | string
+    file_name?: StringNullableFilter<"ticket_documents"> | string | null
+    original_name?: StringNullableFilter<"ticket_documents"> | string | null
+    storage_name?: StringNullableFilter<"ticket_documents"> | string | null
     file_path?: StringFilter<"ticket_documents"> | string
     file_size?: IntNullableFilter<"ticket_documents"> | number | null
     file_extension?: StringNullableFilter<"ticket_documents"> | string | null
@@ -13292,7 +13366,9 @@ export namespace Prisma {
   export type ticket_documentsOrderByWithRelationInput = {
     ticket_document_id?: SortOrder
     ticket_id?: SortOrder
-    file_name?: SortOrder
+    file_name?: SortOrderInput | SortOrder
+    original_name?: SortOrderInput | SortOrder
+    storage_name?: SortOrderInput | SortOrder
     file_path?: SortOrder
     file_size?: SortOrderInput | SortOrder
     file_extension?: SortOrderInput | SortOrder
@@ -13303,23 +13379,27 @@ export namespace Prisma {
 
   export type ticket_documentsWhereUniqueInput = Prisma.AtLeast<{
     ticket_document_id?: bigint | number
-    file_name?: string
+    storage_name?: string
     AND?: ticket_documentsWhereInput | ticket_documentsWhereInput[]
     OR?: ticket_documentsWhereInput[]
     NOT?: ticket_documentsWhereInput | ticket_documentsWhereInput[]
     ticket_id?: BigIntFilter<"ticket_documents"> | bigint | number
+    file_name?: StringNullableFilter<"ticket_documents"> | string | null
+    original_name?: StringNullableFilter<"ticket_documents"> | string | null
     file_path?: StringFilter<"ticket_documents"> | string
     file_size?: IntNullableFilter<"ticket_documents"> | number | null
     file_extension?: StringNullableFilter<"ticket_documents"> | string | null
     created_at?: DateTimeNullableFilter<"ticket_documents"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"ticket_documents"> | Date | string | null
     tickets?: XOR<TicketsRelationFilter, ticketsWhereInput>
-  }, "ticket_document_id" | "file_name">
+  }, "ticket_document_id" | "storage_name">
 
   export type ticket_documentsOrderByWithAggregationInput = {
     ticket_document_id?: SortOrder
     ticket_id?: SortOrder
-    file_name?: SortOrder
+    file_name?: SortOrderInput | SortOrder
+    original_name?: SortOrderInput | SortOrder
+    storage_name?: SortOrderInput | SortOrder
     file_path?: SortOrder
     file_size?: SortOrderInput | SortOrder
     file_extension?: SortOrderInput | SortOrder
@@ -13338,7 +13418,9 @@ export namespace Prisma {
     NOT?: ticket_documentsScalarWhereWithAggregatesInput | ticket_documentsScalarWhereWithAggregatesInput[]
     ticket_document_id?: BigIntWithAggregatesFilter<"ticket_documents"> | bigint | number
     ticket_id?: BigIntWithAggregatesFilter<"ticket_documents"> | bigint | number
-    file_name?: StringWithAggregatesFilter<"ticket_documents"> | string
+    file_name?: StringNullableWithAggregatesFilter<"ticket_documents"> | string | null
+    original_name?: StringNullableWithAggregatesFilter<"ticket_documents"> | string | null
+    storage_name?: StringNullableWithAggregatesFilter<"ticket_documents"> | string | null
     file_path?: StringWithAggregatesFilter<"ticket_documents"> | string
     file_size?: IntNullableWithAggregatesFilter<"ticket_documents"> | number | null
     file_extension?: StringNullableWithAggregatesFilter<"ticket_documents"> | string | null
@@ -13424,7 +13506,9 @@ export namespace Prisma {
     NOT?: ticket_reply_documentsWhereInput | ticket_reply_documentsWhereInput[]
     ticket_reply_document_id?: BigIntFilter<"ticket_reply_documents"> | bigint | number
     ticket_reply_id?: BigIntFilter<"ticket_reply_documents"> | bigint | number
-    file_name?: StringFilter<"ticket_reply_documents"> | string
+    file_name?: StringNullableFilter<"ticket_reply_documents"> | string | null
+    original_name?: StringNullableFilter<"ticket_reply_documents"> | string | null
+    storage_name?: StringNullableFilter<"ticket_reply_documents"> | string | null
     file_path?: StringFilter<"ticket_reply_documents"> | string
     file_size?: IntNullableFilter<"ticket_reply_documents"> | number | null
     file_extension?: StringNullableFilter<"ticket_reply_documents"> | string | null
@@ -13436,7 +13520,9 @@ export namespace Prisma {
   export type ticket_reply_documentsOrderByWithRelationInput = {
     ticket_reply_document_id?: SortOrder
     ticket_reply_id?: SortOrder
-    file_name?: SortOrder
+    file_name?: SortOrderInput | SortOrder
+    original_name?: SortOrderInput | SortOrder
+    storage_name?: SortOrderInput | SortOrder
     file_path?: SortOrder
     file_size?: SortOrderInput | SortOrder
     file_extension?: SortOrderInput | SortOrder
@@ -13447,23 +13533,27 @@ export namespace Prisma {
 
   export type ticket_reply_documentsWhereUniqueInput = Prisma.AtLeast<{
     ticket_reply_document_id?: bigint | number
-    file_name?: string
+    storage_name?: string
     AND?: ticket_reply_documentsWhereInput | ticket_reply_documentsWhereInput[]
     OR?: ticket_reply_documentsWhereInput[]
     NOT?: ticket_reply_documentsWhereInput | ticket_reply_documentsWhereInput[]
     ticket_reply_id?: BigIntFilter<"ticket_reply_documents"> | bigint | number
+    file_name?: StringNullableFilter<"ticket_reply_documents"> | string | null
+    original_name?: StringNullableFilter<"ticket_reply_documents"> | string | null
     file_path?: StringFilter<"ticket_reply_documents"> | string
     file_size?: IntNullableFilter<"ticket_reply_documents"> | number | null
     file_extension?: StringNullableFilter<"ticket_reply_documents"> | string | null
     created_at?: DateTimeNullableFilter<"ticket_reply_documents"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"ticket_reply_documents"> | Date | string | null
     ticket_replys?: XOR<Ticket_replysRelationFilter, ticket_replysWhereInput>
-  }, "ticket_reply_document_id" | "file_name">
+  }, "ticket_reply_document_id" | "storage_name">
 
   export type ticket_reply_documentsOrderByWithAggregationInput = {
     ticket_reply_document_id?: SortOrder
     ticket_reply_id?: SortOrder
-    file_name?: SortOrder
+    file_name?: SortOrderInput | SortOrder
+    original_name?: SortOrderInput | SortOrder
+    storage_name?: SortOrderInput | SortOrder
     file_path?: SortOrder
     file_size?: SortOrderInput | SortOrder
     file_extension?: SortOrderInput | SortOrder
@@ -13482,7 +13572,9 @@ export namespace Prisma {
     NOT?: ticket_reply_documentsScalarWhereWithAggregatesInput | ticket_reply_documentsScalarWhereWithAggregatesInput[]
     ticket_reply_document_id?: BigIntWithAggregatesFilter<"ticket_reply_documents"> | bigint | number
     ticket_reply_id?: BigIntWithAggregatesFilter<"ticket_reply_documents"> | bigint | number
-    file_name?: StringWithAggregatesFilter<"ticket_reply_documents"> | string
+    file_name?: StringNullableWithAggregatesFilter<"ticket_reply_documents"> | string | null
+    original_name?: StringNullableWithAggregatesFilter<"ticket_reply_documents"> | string | null
+    storage_name?: StringNullableWithAggregatesFilter<"ticket_reply_documents"> | string | null
     file_path?: StringWithAggregatesFilter<"ticket_reply_documents"> | string
     file_size?: IntNullableWithAggregatesFilter<"ticket_reply_documents"> | number | null
     file_extension?: StringNullableWithAggregatesFilter<"ticket_reply_documents"> | string | null
@@ -13851,6 +13943,8 @@ export namespace Prisma {
     role_id?: IntFilter<"users"> | number
     is_active?: BoolFilter<"users"> | boolean
     verify_token?: StringNullableFilter<"users"> | string | null
+    verify_token_hash?: StringNullableFilter<"users"> | string | null
+    verify_token_expires_at?: DateTimeNullableFilter<"users"> | Date | string | null
     login_at?: DateTimeNullableFilter<"users"> | Date | string | null
     logout_at?: DateTimeNullableFilter<"users"> | Date | string | null
     created_at?: DateTimeFilter<"users"> | Date | string
@@ -13870,6 +13964,8 @@ export namespace Prisma {
     role_id?: SortOrder
     is_active?: SortOrder
     verify_token?: SortOrderInput | SortOrder
+    verify_token_hash?: SortOrderInput | SortOrder
+    verify_token_expires_at?: SortOrderInput | SortOrder
     login_at?: SortOrderInput | SortOrder
     logout_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
@@ -13892,6 +13988,8 @@ export namespace Prisma {
     role_id?: IntFilter<"users"> | number
     is_active?: BoolFilter<"users"> | boolean
     verify_token?: StringNullableFilter<"users"> | string | null
+    verify_token_hash?: StringNullableFilter<"users"> | string | null
+    verify_token_expires_at?: DateTimeNullableFilter<"users"> | Date | string | null
     login_at?: DateTimeNullableFilter<"users"> | Date | string | null
     logout_at?: DateTimeNullableFilter<"users"> | Date | string | null
     created_at?: DateTimeFilter<"users"> | Date | string
@@ -13911,6 +14009,8 @@ export namespace Prisma {
     role_id?: SortOrder
     is_active?: SortOrder
     verify_token?: SortOrderInput | SortOrder
+    verify_token_hash?: SortOrderInput | SortOrder
+    verify_token_expires_at?: SortOrderInput | SortOrder
     login_at?: SortOrderInput | SortOrder
     logout_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
@@ -13934,6 +14034,8 @@ export namespace Prisma {
     role_id?: IntWithAggregatesFilter<"users"> | number
     is_active?: BoolWithAggregatesFilter<"users"> | boolean
     verify_token?: StringNullableWithAggregatesFilter<"users"> | string | null
+    verify_token_hash?: StringNullableWithAggregatesFilter<"users"> | string | null
+    verify_token_expires_at?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
     login_at?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
     logout_at?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"users"> | Date | string
@@ -14127,7 +14229,9 @@ export namespace Prisma {
 
   export type ticket_documentsCreateInput = {
     ticket_document_id?: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -14139,7 +14243,9 @@ export namespace Prisma {
   export type ticket_documentsUncheckedCreateInput = {
     ticket_document_id?: bigint | number
     ticket_id: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -14149,7 +14255,9 @@ export namespace Prisma {
 
   export type ticket_documentsUpdateInput = {
     ticket_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14161,7 +14269,9 @@ export namespace Prisma {
   export type ticket_documentsUncheckedUpdateInput = {
     ticket_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
     ticket_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14172,7 +14282,9 @@ export namespace Prisma {
   export type ticket_documentsCreateManyInput = {
     ticket_document_id?: bigint | number
     ticket_id: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -14182,7 +14294,9 @@ export namespace Prisma {
 
   export type ticket_documentsUpdateManyMutationInput = {
     ticket_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14193,7 +14307,9 @@ export namespace Prisma {
   export type ticket_documentsUncheckedUpdateManyInput = {
     ticket_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
     ticket_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14281,7 +14397,9 @@ export namespace Prisma {
 
   export type ticket_reply_documentsCreateInput = {
     ticket_reply_document_id?: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -14293,7 +14411,9 @@ export namespace Prisma {
   export type ticket_reply_documentsUncheckedCreateInput = {
     ticket_reply_document_id?: bigint | number
     ticket_reply_id: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -14303,7 +14423,9 @@ export namespace Prisma {
 
   export type ticket_reply_documentsUpdateInput = {
     ticket_reply_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14315,7 +14437,9 @@ export namespace Prisma {
   export type ticket_reply_documentsUncheckedUpdateInput = {
     ticket_reply_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
     ticket_reply_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14326,7 +14450,9 @@ export namespace Prisma {
   export type ticket_reply_documentsCreateManyInput = {
     ticket_reply_document_id?: bigint | number
     ticket_reply_id: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -14336,7 +14462,9 @@ export namespace Prisma {
 
   export type ticket_reply_documentsUpdateManyMutationInput = {
     ticket_reply_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14347,7 +14475,9 @@ export namespace Prisma {
   export type ticket_reply_documentsUncheckedUpdateManyInput = {
     ticket_reply_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
     ticket_reply_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14714,6 +14844,8 @@ export namespace Prisma {
     password: string
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -14733,6 +14865,8 @@ export namespace Prisma {
     role_id: number
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -14750,6 +14884,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14769,6 +14905,8 @@ export namespace Prisma {
     role_id?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14787,6 +14925,8 @@ export namespace Prisma {
     role_id: number
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -14801,6 +14941,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14816,6 +14958,8 @@ export namespace Prisma {
     role_id?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15119,6 +15263,8 @@ export namespace Prisma {
     ticket_document_id?: SortOrder
     ticket_id?: SortOrder
     file_name?: SortOrder
+    original_name?: SortOrder
+    storage_name?: SortOrder
     file_path?: SortOrder
     file_size?: SortOrder
     file_extension?: SortOrder
@@ -15136,6 +15282,8 @@ export namespace Prisma {
     ticket_document_id?: SortOrder
     ticket_id?: SortOrder
     file_name?: SortOrder
+    original_name?: SortOrder
+    storage_name?: SortOrder
     file_path?: SortOrder
     file_size?: SortOrder
     file_extension?: SortOrder
@@ -15147,6 +15295,8 @@ export namespace Prisma {
     ticket_document_id?: SortOrder
     ticket_id?: SortOrder
     file_name?: SortOrder
+    original_name?: SortOrder
+    storage_name?: SortOrder
     file_path?: SortOrder
     file_size?: SortOrder
     file_extension?: SortOrder
@@ -15255,6 +15405,8 @@ export namespace Prisma {
     ticket_reply_document_id?: SortOrder
     ticket_reply_id?: SortOrder
     file_name?: SortOrder
+    original_name?: SortOrder
+    storage_name?: SortOrder
     file_path?: SortOrder
     file_size?: SortOrder
     file_extension?: SortOrder
@@ -15272,6 +15424,8 @@ export namespace Prisma {
     ticket_reply_document_id?: SortOrder
     ticket_reply_id?: SortOrder
     file_name?: SortOrder
+    original_name?: SortOrder
+    storage_name?: SortOrder
     file_path?: SortOrder
     file_size?: SortOrder
     file_extension?: SortOrder
@@ -15283,6 +15437,8 @@ export namespace Prisma {
     ticket_reply_document_id?: SortOrder
     ticket_reply_id?: SortOrder
     file_name?: SortOrder
+    original_name?: SortOrder
+    storage_name?: SortOrder
     file_path?: SortOrder
     file_size?: SortOrder
     file_extension?: SortOrder
@@ -15648,6 +15804,8 @@ export namespace Prisma {
     role_id?: SortOrder
     is_active?: SortOrder
     verify_token?: SortOrder
+    verify_token_hash?: SortOrder
+    verify_token_expires_at?: SortOrder
     login_at?: SortOrder
     logout_at?: SortOrder
     created_at?: SortOrder
@@ -15668,6 +15826,8 @@ export namespace Prisma {
     role_id?: SortOrder
     is_active?: SortOrder
     verify_token?: SortOrder
+    verify_token_hash?: SortOrder
+    verify_token_expires_at?: SortOrder
     login_at?: SortOrder
     logout_at?: SortOrder
     created_at?: SortOrder
@@ -15683,6 +15843,8 @@ export namespace Prisma {
     role_id?: SortOrder
     is_active?: SortOrder
     verify_token?: SortOrder
+    verify_token_hash?: SortOrder
+    verify_token_expires_at?: SortOrder
     login_at?: SortOrder
     logout_at?: SortOrder
     created_at?: SortOrder
@@ -16962,6 +17124,8 @@ export namespace Prisma {
     password: string
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -16979,6 +17143,8 @@ export namespace Prisma {
     password: string
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -17026,6 +17192,8 @@ export namespace Prisma {
     role_id?: IntFilter<"users"> | number
     is_active?: BoolFilter<"users"> | boolean
     verify_token?: StringNullableFilter<"users"> | string | null
+    verify_token_hash?: StringNullableFilter<"users"> | string | null
+    verify_token_expires_at?: DateTimeNullableFilter<"users"> | Date | string | null
     login_at?: DateTimeNullableFilter<"users"> | Date | string | null
     logout_at?: DateTimeNullableFilter<"users"> | Date | string | null
     created_at?: DateTimeFilter<"users"> | Date | string
@@ -17345,6 +17513,8 @@ export namespace Prisma {
     password: string
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -17363,6 +17533,8 @@ export namespace Prisma {
     role_id: number
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -17378,7 +17550,9 @@ export namespace Prisma {
 
   export type ticket_reply_documentsCreateWithoutTicket_replysInput = {
     ticket_reply_document_id?: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -17388,7 +17562,9 @@ export namespace Prisma {
 
   export type ticket_reply_documentsUncheckedCreateWithoutTicket_replysInput = {
     ticket_reply_document_id?: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -17512,6 +17688,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17530,6 +17708,8 @@ export namespace Prisma {
     role_id?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17560,7 +17740,9 @@ export namespace Prisma {
     NOT?: ticket_reply_documentsScalarWhereInput | ticket_reply_documentsScalarWhereInput[]
     ticket_reply_document_id?: BigIntFilter<"ticket_reply_documents"> | bigint | number
     ticket_reply_id?: BigIntFilter<"ticket_reply_documents"> | bigint | number
-    file_name?: StringFilter<"ticket_reply_documents"> | string
+    file_name?: StringNullableFilter<"ticket_reply_documents"> | string | null
+    original_name?: StringNullableFilter<"ticket_reply_documents"> | string | null
+    storage_name?: StringNullableFilter<"ticket_reply_documents"> | string | null
     file_path?: StringFilter<"ticket_reply_documents"> | string
     file_size?: IntNullableFilter<"ticket_reply_documents"> | number | null
     file_extension?: StringNullableFilter<"ticket_reply_documents"> | string | null
@@ -17769,7 +17951,9 @@ export namespace Prisma {
 
   export type ticket_documentsCreateWithoutTicketsInput = {
     ticket_document_id?: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -17779,7 +17963,9 @@ export namespace Prisma {
 
   export type ticket_documentsUncheckedCreateWithoutTicketsInput = {
     ticket_document_id?: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -17949,6 +18135,8 @@ export namespace Prisma {
     password: string
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -17967,6 +18155,8 @@ export namespace Prisma {
     role_id: number
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -17988,6 +18178,8 @@ export namespace Prisma {
     password: string
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -18006,6 +18198,8 @@ export namespace Prisma {
     role_id: number
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -18041,7 +18235,9 @@ export namespace Prisma {
     NOT?: ticket_documentsScalarWhereInput | ticket_documentsScalarWhereInput[]
     ticket_document_id?: BigIntFilter<"ticket_documents"> | bigint | number
     ticket_id?: BigIntFilter<"ticket_documents"> | bigint | number
-    file_name?: StringFilter<"ticket_documents"> | string
+    file_name?: StringNullableFilter<"ticket_documents"> | string | null
+    original_name?: StringNullableFilter<"ticket_documents"> | string | null
+    storage_name?: StringNullableFilter<"ticket_documents"> | string | null
     file_path?: StringFilter<"ticket_documents"> | string
     file_size?: IntNullableFilter<"ticket_documents"> | number | null
     file_extension?: StringNullableFilter<"ticket_documents"> | string | null
@@ -18228,6 +18424,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18246,6 +18444,8 @@ export namespace Prisma {
     role_id?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18273,6 +18473,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18291,6 +18493,8 @@ export namespace Prisma {
     role_id?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18711,6 +18915,8 @@ export namespace Prisma {
     password: string
     is_active?: boolean
     verify_token?: string | null
+    verify_token_hash?: string | null
+    verify_token_expires_at?: Date | string | null
     login_at?: Date | string | null
     logout_at?: Date | string | null
     created_at?: Date | string
@@ -18725,6 +18931,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18742,6 +18950,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18759,6 +18969,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     is_active?: BoolFieldUpdateOperationsInput | boolean
     verify_token?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    verify_token_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     logout_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18851,7 +19063,9 @@ export namespace Prisma {
 
   export type ticket_reply_documentsCreateManyTicket_replysInput = {
     ticket_reply_document_id?: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -18861,7 +19075,9 @@ export namespace Prisma {
 
   export type ticket_reply_documentsUpdateWithoutTicket_replysInput = {
     ticket_reply_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18871,7 +19087,9 @@ export namespace Prisma {
 
   export type ticket_reply_documentsUncheckedUpdateWithoutTicket_replysInput = {
     ticket_reply_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18881,7 +19099,9 @@ export namespace Prisma {
 
   export type ticket_reply_documentsUncheckedUpdateManyWithoutTicket_replysInput = {
     ticket_reply_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19097,7 +19317,9 @@ export namespace Prisma {
 
   export type ticket_documentsCreateManyTicketsInput = {
     ticket_document_id?: bigint | number
-    file_name: string
+    file_name?: string | null
+    original_name?: string | null
+    storage_name?: string | null
     file_path: string
     file_size?: number | null
     file_extension?: string | null
@@ -19116,7 +19338,9 @@ export namespace Prisma {
 
   export type ticket_documentsUpdateWithoutTicketsInput = {
     ticket_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19126,7 +19350,9 @@ export namespace Prisma {
 
   export type ticket_documentsUncheckedUpdateWithoutTicketsInput = {
     ticket_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19136,7 +19362,9 @@ export namespace Prisma {
 
   export type ticket_documentsUncheckedUpdateManyWithoutTicketsInput = {
     ticket_document_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    file_name?: StringFieldUpdateOperationsInput | string
+    file_name?: NullableStringFieldUpdateOperationsInput | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
+    storage_name?: NullableStringFieldUpdateOperationsInput | string | null
     file_path?: StringFieldUpdateOperationsInput | string
     file_size?: NullableIntFieldUpdateOperationsInput | number | null
     file_extension?: NullableStringFieldUpdateOperationsInput | string | null

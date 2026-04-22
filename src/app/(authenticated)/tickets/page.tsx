@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Table, Button, Space, Typography, Tag, Card, message, Input, Popover, Checkbox, Tooltip, Collapse, Select, DatePicker, Row, Col } from 'antd';
+import { Table, Button, Space, Typography, Tag, Card, message, Input, Popover, Checkbox, Tooltip, Collapse, Select, DatePicker, Row, Col, Popconfirm } from 'antd';
 import { 
   PlusOutlined, 
   SearchOutlined, 
@@ -17,12 +17,15 @@ import {
   ClearOutlined,
   CalendarOutlined,
   UserOutlined,
-  FileSearchOutlined
+  FileSearchOutlined,
+  EyeOutlined,
+  EditOutlined,
+  DeleteOutlined
 } from '@ant-design/icons';
 import { Skeleton } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { getTickets, getTicketSummary, getTicketFilterData } from '@/app/actions/tickets';
+import { getTickets, getTicketSummary, getTicketFilterData, deleteTicket } from '@/app/actions/tickets';
 import { getPriorityIcon, getCategoryIcon } from '@/lib/icons';
 import dayjs from 'dayjs';
 
@@ -73,9 +76,10 @@ const ALL_COLUMNS = [
   { key: 'updated_by',      label: 'Updated By' },
   { key: 'created_at',      label: 'Created At' },
   { key: 'updated_at',      label: 'Updated At' },
+  { key: 'actions',         label: 'Actions' },
 ];
 
-const DEFAULT_VISIBLE = ['ticket_number', 'status', 'ticket_subject', 'category', 'requestor', 'priority', 'division', 'created_by', 'created_at'];
+const DEFAULT_VISIBLE = ['ticket_number', 'status', 'ticket_subject', 'category', 'requestor', 'priority', 'division', 'created_by', 'created_at', 'actions'];
 
 export default function TicketsDashboard() {
   const { resolvedTheme } = useTheme();
@@ -387,6 +391,42 @@ export default function TicketsDashboard() {
         <Text type="secondary" className="text-[11px]">
           {date ? new Date(date).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : <span className="text-slate-300">—</span>}
         </Text>
+      ),
+    },
+    actions: {
+      title: 'Actions',
+      key: 'actions',
+      width: 170,
+      fixed: 'right',
+      render: (_: any, record: any) => (
+        <Space size="small">
+          <Tooltip title="View">
+            <Button size="small" icon={<EyeOutlined />} onClick={() => router.push(`/tickets/${record.ticket_id}`)} />
+          </Tooltip>
+          <Tooltip title="Edit">
+            <Button size="small" icon={<EditOutlined />} onClick={() => router.push(`/tickets/${record.ticket_id}/edit`)} />
+          </Tooltip>
+          <Popconfirm
+            title="Delete this ticket?"
+            description="This will remove the ticket from active lists."
+            okText="Delete"
+            cancelText="Cancel"
+            okButtonProps={{ danger: true }}
+            onConfirm={async () => {
+              try {
+                await deleteTicket(String(record.ticket_id));
+                message.success('Ticket deleted');
+                fetchData();
+              } catch (err: any) {
+                message.error(err?.message || 'Failed to delete ticket');
+              }
+            }}
+          >
+            <Tooltip title="Delete">
+              <Button size="small" danger icon={<DeleteOutlined />} />
+            </Tooltip>
+          </Popconfirm>
+        </Space>
       ),
     },
   };

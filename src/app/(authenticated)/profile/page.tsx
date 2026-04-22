@@ -145,6 +145,7 @@ export default function ProfilePage() {
               items={[
                 {
                   key: 'general',
+                  forceRender: true,
                   label: (
                     <span className="flex items-center gap-2 px-6 py-4">
                       <UserOutlined /> General Info
@@ -216,6 +217,7 @@ export default function ProfilePage() {
                 },
                 {
                   key: 'security',
+                  forceRender: true,
                   label: (
                     <span className="flex items-center gap-2 px-6 py-4">
                       <LockOutlined /> Change Password

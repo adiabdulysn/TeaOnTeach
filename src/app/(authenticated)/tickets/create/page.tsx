@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { 
-  Form, Input, Button, Card, Typography, message, 
+  Form, Input, Button, Card, Typography, 
   Space, Select, Divider, Skeleton, Upload, DatePicker, Steps,
   Row, Col, App
 } from 'antd';
@@ -35,6 +35,7 @@ interface TicketMasterData {
 }
 
 export default function CreateTicketPage() {
+  const { message } = App.useApp();
   const router = useRouter();
   const [form] = Form.useForm();
   
@@ -98,7 +99,7 @@ export default function CreateTicketPage() {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      // Correctly access fileList from values.attachments
+      // Correctly extract fileList from values.attachments
       const fileList = values.attachments || [];
       const processedFiles = await Promise.all(fileList.map(async (file: any) => {
         const base64 = await new Promise((resolve) => {
@@ -262,6 +263,7 @@ export default function CreateTicketPage() {
       )
     }
   ];
+
 
   return (
     <App>

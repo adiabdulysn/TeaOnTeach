@@ -3,7 +3,7 @@
 import React, { useState, useEffect, use } from 'react';
 import { 
   Typography, Card, Space, Tag, Button, Row, Col, 
-  Divider, Input, Form, message, Skeleton, Avatar,
+  Divider, Input, Form, Skeleton, Avatar,
   Empty, Select, Upload, App, Popconfirm
 } from 'antd';
 import { 
@@ -23,9 +23,11 @@ import {
   CheckCircleOutlined,
   LockOutlined,
   ExclamationCircleOutlined,
+  DeleteOutlined,
 } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
-import { getTicketDetail, saveTicketReply, getTicketFormData, closeTicket } from '@/app/actions/tickets';
+import { getTicketDetail, saveTicketReply, getTicketFormData, closeTicket, deleteTicketReply } from '@/app/actions/tickets';
+import { getCurrentUser } from '@/app/actions/auth';
 import { getPriorityIcon, getCategoryIcon } from '@/lib/icons';
 
 const { Title, Text, Paragraph } = Typography;
@@ -65,12 +67,14 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
   const router = useRouter();
   const { id } = use(params);
   const [form] = Form.useForm();
+  const { message } = App.useApp();
   
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [closing, setClosing] = useState(false);
   const [ticket, setTicket] = useState<any>(null);
   const [masterData, setMasterData] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
 
   // Determine if ticket is already in a terminal state
   const isClosed = ticket ? 
@@ -79,12 +83,14 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
 
   const fetchDetail = async () => {
     try {
-      const [detail, formData] = await Promise.all([
+      const [detail, formData, currentUser] = await Promise.all([
         getTicketDetail(id),
-        getTicketFormData()
+        getTicketFormData(),
+        getCurrentUser()
       ]);
       setTicket(detail);
       setMasterData(formData);
+      setUser(currentUser);
       form.setFieldsValue({ ticket_status_id: detail.ticket_status_id });
     } catch (error) {
       message.error('Failed to load ticket details');
@@ -100,7 +106,8 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
   const onReply = async (values: any) => {
     setSubmitting(true);
     try {
-      const fileList = values.attachments?.fileList || [];
+      // Correctly extract fileList from values.attachments
+      const fileList = values.attachments || [];
       const processedFiles = await Promise.all(fileList.map(async (file: any) => {
         const base64 = await new Promise((resolve) => {
           const reader = new FileReader();
@@ -123,6 +130,16 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
       message.error('Failed to post reply');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const onDeleteReply = async (replyId: string) => {
+    try {
+      await deleteTicketReply(replyId);
+      message.success('Reply deleted successfully');
+      fetchDetail();
+    } catch (error: any) {
+      message.error(error.message || 'Failed to delete reply');
     }
   };
 
@@ -266,7 +283,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                 {ticket.documents?.length > 0 && (
                   <div className="mt-8 pt-6 border-t border-card-border">
                     <Text strong className="block text-xs uppercase tracking-widest text-text-secondary mb-4 flex items-center gap-2">
-                      <PaperClipOutlined /> Uploaded Evidence
+                      <PaperClipOutlined /> Attachments
                     </Text>
                     <div className="grid grid-cols-2 gap-4">
                       {ticket.documents.map((doc: any) => (
@@ -322,7 +339,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                         </div>
                         
                         {/* Reply Bubble */}
-                        <div className="flex-1">
+                        <div className="flex-1 group">
                           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                              <div className="flex gap-2 items-center flex-wrap">
                                <Text strong className="text-text-primary">{reply.user_name}</Text>
@@ -335,6 +352,28 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                              <Text type="secondary" className="text-xs text-text-secondary">
                                {new Date(reply.created_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
                              </Text>
+                             
+                             {/* Delete Action (Admin or Owner) */}
+                             {(user?.permissions?.includes('delete_tickets') || user?.role_name === 'Admin' || user?.user_id === reply.pic_user_id?.toString()) && (
+                               <Popconfirm
+                                 title="Delete this response?"
+                                 description="This action cannot be undone."
+                                 onConfirm={() => onDeleteReply(reply.ticket_reply_id)}
+                                 okText="Yes, Delete"
+                                 cancelText="No"
+                                 okButtonProps={{ danger: true, className: 'rounded-lg' }}
+                                 cancelButtonProps={{ className: 'rounded-lg' }}
+                                 icon={<ExclamationCircleOutlined style={{ color: 'red' }} />}
+                               >
+                                 <Button 
+                                   type="text" 
+                                   danger 
+                                   size="small" 
+                                   icon={<DeleteOutlined />} 
+                                   className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 flex items-center justify-center p-1"
+                                 />
+                               </Popconfirm>
+                             )}
                           </div>
                           
                           <div className="bg-card-bg p-6 rounded-2xl rounded-tl-sm border border-card-border shadow-sm group-hover:shadow-md transition-shadow">

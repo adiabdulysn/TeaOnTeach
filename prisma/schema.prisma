@@ -41,7 +41,11 @@ model roles {
 model ticket_documents {
   ticket_document_id BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
   ticket_id          BigInt    @db.UnsignedBigInt
-  file_name          String    @unique(map: "ticket_documents_unique") @db.VarChar(255)
+  // Legacy column (kept for backward-compatible migrations)
+  file_name          String?   @db.VarChar(255)
+  // New columns for secure storage
+  original_name      String?   @db.VarChar(255)
+  storage_name       String?   @unique(map: "ticket_documents_storage_unique") @db.VarChar(255)
   file_path          String    @db.VarChar(500)
   file_size          Int?
   file_extension     String?   @db.VarChar(10)
@@ -67,7 +71,11 @@ model ticket_priorities {
 model ticket_reply_documents {
   ticket_reply_document_id BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
   ticket_reply_id          BigInt    @db.UnsignedBigInt
-  file_name                String    @unique(map: "ticket_reply_documents_unique") @db.VarChar(255)
+  // Legacy column (kept for backward-compatible migrations)
+  file_name                String?   @db.VarChar(255)
+  // New columns for secure storage
+  original_name            String?   @db.VarChar(255)
+  storage_name             String?   @unique(map: "ticket_reply_documents_storage_unique") @db.VarChar(255)
   file_path                String    @db.VarChar(500)
   file_size                Int?
   file_extension           String?   @db.VarChar(10)
@@ -164,6 +172,8 @@ model users {
   role_id                                Int             @db.UnsignedTinyInt
   is_active                              Boolean         @default(true)
   verify_token                           String?         @db.Text
+  verify_token_hash                      String?         @db.Text
+  verify_token_expires_at                DateTime?       @db.DateTime(0)
   login_at                               DateTime?       @db.DateTime(0)
   logout_at                              DateTime?       @db.DateTime(0)
   created_at                             DateTime        @default(now()) @db.DateTime(0)
